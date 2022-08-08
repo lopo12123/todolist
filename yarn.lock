@@ -234,6 +234,11 @@
   resolved "https://registry.yarnpkg.com/@types/crypto-js/-/crypto-js-4.1.1.tgz#602859584cecc91894eb23a4892f38cfa927890d"
   integrity sha512-BG7fQKZ689HIoc5h+6D2Dgq1fABRa0RbBWKBd9SP/MVRVXROflpm5fhwyATX5duFmbStzyzyycPB8qUYKDH3NA==
 
+"@types/node@14":
+  version "14.18.23"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.23.tgz#70f5f20b0b1b38f696848c1d3647bb95694e615e"
+  integrity sha512-MhbCWN18R4GhO8ewQWAFK4TGQdBpXWByukz7cWyJmXhvRuCIaM/oWytGPqVmDzgEnnaIc9ss6HbU5mUi+vyZPA==
+
 "@vitejs/plugin-vue@^3.0.0":
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-3.0.1.tgz#b6af8f782485374bbb5fe09edf067a845bf4caae"
