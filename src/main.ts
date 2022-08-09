@@ -1,3 +1,4 @@
+import "./styles/transition.scss";
 import "./styles/index.css";
 import { createApp } from "vue";
 import { router } from "@/routers";
