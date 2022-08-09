@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 
-const useDB =
 </script>
 
 <template>
