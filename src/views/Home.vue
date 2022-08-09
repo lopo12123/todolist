@@ -3,7 +3,8 @@
 </script>
 
 <template>
-    <div class="home-view">
+    <div class="home-view"
+         data-tauri-drag-region>
         home view
     </div>
 </template>
@@ -13,5 +14,8 @@
     position: relative;
     width: 100%;
     height: 100%;
+    padding: 8px;
+    border: solid 1px #333;
+    border-radius: 8px;
 }
 </style>
