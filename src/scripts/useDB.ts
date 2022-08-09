@@ -58,7 +58,7 @@ class UseDB {
      * @description 打开数据库(创建表)
      * @param stores 数据表列表(名称, 主键)
      */
-    init(stores?: { storeName: string, pk?: string }[]) {
+    init(stores?: { storeName: string, pk?: string, autoIncrement?: boolean }[]) {
         return new Promise<boolean>((resolve, reject) => {
             let ifNew = false
             const conn = indexedDB.open(this.#dbName)
@@ -72,8 +72,8 @@ class UseDB {
             conn.onupgradeneeded = () => {
                 if(stores && stores.length > 0) {
                     const db = conn.result
-                    stores.forEach(({ storeName, pk }) => {
-                        db.createObjectStore(storeName, { keyPath: pk || 'id', autoIncrement: true })
+                    stores.forEach(({ storeName, pk, autoIncrement }) => {
+                        db.createObjectStore(storeName, { keyPath: pk || 'id', autoIncrement })
                     })
                     ifNew = true
                 }
@@ -134,7 +134,7 @@ class UseDB {
      * @param storeName 表名
      * @param pk 删除项的主键
      */
-    remove(storeName: string, pk: string) {
+    remove(storeName: string, pk: IDBValidKey | IDBKeyRange) {
         return new Promise<UseDB>((resolve, reject) => {
             const db = this.#db
             if(!db) reject('无数据库对象')
@@ -158,7 +158,7 @@ class UseDB {
      * @param storeName 表名
      * @param pk 查询项的主键
      */
-    query<ExpectResultType extends any>(storeName: string, pk: string) {
+    query<ExpectResultType extends any>(storeName: string, pk: IDBValidKey | IDBKeyRange) {
         return new Promise<ExpectResultType>((resolve, reject) => {
             const db = this.#db
             if(!db) reject('无数据库对象')
@@ -286,6 +286,4 @@ class UseDB {
     }
 }
 
-export {
-    UseDB
-}
+export {}
