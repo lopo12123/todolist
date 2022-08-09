@@ -1,5 +1,5 @@
 import "./styles/transition.scss";
-import "./styles/index.css";
+import "./styles/index.scss";
 import { createApp } from "vue";
 import { router } from "@/routers";
 import Vue3SeamlessScroll from "vue3-seamless-scroll";
