@@ -58,7 +58,7 @@ class UseDB {
      * @description 打开数据库(创建表)
      * @param stores 数据表列表(名称, 主键)
      */
-    init(stores?: { storeName: string, pk?: string, autoIncrement?: boolean }[]) {
+    open(stores?: { storeName: string, pk?: string, autoIncrement?: boolean }[]) {
         return new Promise<boolean>((resolve, reject) => {
             let ifNew = false
             const conn = indexedDB.open(this.#dbName)
@@ -286,4 +286,23 @@ class UseDB {
     }
 }
 
-export {}
+class TODOList {
+    #dbc: UseDB
+
+    constructor() {
+        this.#dbc = new UseDB('todoList')
+    }
+
+    setup() {
+        return this.#dbc
+            .open([
+                { storeName: 'list1' }
+            ])
+    }
+}
+
+// 使用单例
+const todoList = new TODOList()
+// 顶层 await
+await todoList.setup()
+export const useTodoList = () => todoList
