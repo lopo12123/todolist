@@ -5,7 +5,7 @@ const router = useRouter()
 
 setTimeout(() => {
     router.push({ name: 'Home' })
-}, 2000)
+}, 3000)
 </script>
 
 <template>

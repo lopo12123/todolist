@@ -3,9 +3,6 @@ import { useRouter } from "vue-router";
 
 const router = useRouter()
 
-setTimeout(() => {
-    router.push({ name: 'OrderList' })
-}, 4000)
 </script>
 
 <template>
