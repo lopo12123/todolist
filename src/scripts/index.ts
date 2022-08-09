@@ -55,26 +55,27 @@ class UseDB {
     }
 
     /**
-     * @description 打开数据库, 创建表
+     * @description 打开数据库(创建表)
      * @param stores 数据表列表(名称, 主键)
      */
-    init(stores: { storeName: string, pk?: string }[]) {
-        return new Promise<UseDB>((resolve, reject) => {
-            if(stores.length === 0) reject('至少需要创建一张表!')
-            else {
-                const conn = indexedDB.open(this.#dbName)
-                conn.onsuccess = () => {
-                    this.#db = conn.result
-                    resolve(this)
-                }
-                conn.onerror = () => {
-                    reject('打开数据库出错')
-                }
-                conn.onupgradeneeded = () => {
+    init(stores?: { storeName: string, pk?: string }[]) {
+        return new Promise<boolean>((resolve, reject) => {
+            let ifNew = false
+            const conn = indexedDB.open(this.#dbName)
+            conn.onsuccess = () => {
+                this.#db = conn.result
+                resolve(ifNew)
+            }
+            conn.onerror = () => {
+                reject('打开数据库出错')
+            }
+            conn.onupgradeneeded = () => {
+                if(stores && stores.length > 0) {
                     const db = conn.result
                     stores.forEach(({ storeName, pk }) => {
                         db.createObjectStore(storeName, { keyPath: pk || 'id', autoIncrement: true })
                     })
+                    ifNew = true
                 }
             }
         })
@@ -157,8 +158,8 @@ class UseDB {
      * @param storeName 表名
      * @param pk 查询项的主键
      */
-    query(storeName: string, pk: string) {
-        return new Promise<UseDB>((resolve, reject) => {
+    query<ExpectResultType extends any>(storeName: string, pk: string) {
+        return new Promise<ExpectResultType>((resolve, reject) => {
             const db = this.#db
             if(!db) reject('无数据库对象')
             else {
@@ -167,7 +168,7 @@ class UseDB {
                     .objectStore(storeName)
                     .get(pk)
                 dbOperate.onsuccess = () => {
-                    resolve(this)
+                    resolve(dbOperate.result)
                 }
                 dbOperate.onerror = () => {
                     reject('查询数据出错')
@@ -248,17 +249,20 @@ class UseDB {
         else {
             return new Promise<UseDB>((resolve, reject) => {
                 const oldVersion = db.version
+                // 先关闭旧连接
+                this.close()
+                // 创建新连接并触发升级
                 const dbOperate = window.indexedDB.open(this.#dbName, oldVersion + 1)
                 dbOperate.onsuccess = () => {
-                    const newDB = dbOperate.result
-                    this.#db = newDB
-                    newDB.close()
+                    this.#db = dbOperate.result
                     resolve(this)
                 }
                 dbOperate.onupgradeneeded = (e) => {
+                    console.log('数据库升级')
                     dbOperate.result.deleteObjectStore(storeName)
                 }
-                dbOperate.onerror = () => {
+                dbOperate.onerror = (err) => {
+                    console.log('删除错误:', err)
                     reject('删除数据表出错')
                 }
             })
@@ -276,6 +280,8 @@ class UseDB {
      * @description 删除数据库
      */
     dispose() {
+        this.close()
+        this.#db = null
         return UseDB.dropDb(this.#dbName)
     }
 }
