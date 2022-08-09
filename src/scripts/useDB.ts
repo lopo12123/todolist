@@ -286,23 +286,6 @@ class UseDB {
     }
 }
 
-class TODOList {
-    #dbc: UseDB
-
-    constructor() {
-        this.#dbc = new UseDB('todoList')
-    }
-
-    setup() {
-        return this.#dbc
-            .open([
-                { storeName: 'list1' }
-            ])
-    }
+export {
+    UseDB
 }
-
-// 使用单例
-const todoList = new TODOList()
-// 顶层 await
-await todoList.setup()
-export const useTodoList = () => todoList
