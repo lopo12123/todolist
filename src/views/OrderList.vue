@@ -4,19 +4,18 @@ import { useRouter } from "vue-router";
 const router = useRouter()
 
 setTimeout(() => {
-    router.push({ name: 'OrderList' })
-}, 4000)
+    router.push({ name: 'Home' })
+}, 2000)
 </script>
 
 <template>
-    <div class="home-view"
-         data-tauri-drag-region>
-        home view
+    <div class="order-list-view">
+        OrderList
     </div>
 </template>
 
 <style lang="scss" scoped>
-.home-view {
+.order-list-view {
     position: relative;
     width: 100%;
     height: 100%;

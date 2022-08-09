@@ -1,22 +1,15 @@
 <script lang="ts" setup>
-import { useRouter } from "vue-router";
 
-const router = useRouter()
-
-setTimeout(() => {
-    router.push({ name: 'OrderList' })
-}, 4000)
 </script>
 
 <template>
-    <div class="home-view"
-         data-tauri-drag-region>
-        home view
+    <div class="calendar-view">
+        Calendar
     </div>
 </template>
 
 <style lang="scss" scoped>
-.home-view {
+.calendar-view {
     position: relative;
     width: 100%;
     height: 100%;
