@@ -1,43 +1,13 @@
 <script lang="ts" setup>
-import { onBeforeUnmount, onMounted, ref, shallowRef } from "vue";
-import { ClockConfig, UseClock } from "@/components/Clock/useClock";
-import { DeepPartial, DeepRequired } from "@/scripts/util";
+import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from "vue";
+import { ClockConfig, DefaultConfig, UseClock } from "@/components/Clock/useClock";
 
-const { config } = withDefaults(defineProps<{
-    config?: DeepPartial<ClockConfig>
-}>(), {
-    config: () => ({
-        dial: {
-            radius: 75,
-            stroke: '#777777',
-            strokeWidth: 1
-        },
-        hour: {
-            percent: 0.5,
-            tail: 3,
-            stroke: '#555555',
-            strokeWidth: 4
-        },
-        minute: {
-            percent: 0.6,
-            tail: 4,
-            stroke: '#444444',
-            strokeWidth: 3
-        },
-        second: {
-            percent: 0.7,
-            tail: 5,
-            stroke: '#555555',
-            strokeWidth: 2
-        },
-        number: {
-            show: true,
-            text: 'Arab',
-            style: 'stroke',
-            color: '#333333'
-        },
-    })
-}) as { config: ClockConfig }
+const { config } = defineProps<{
+    config?: Partial<ClockConfig>
+}>()
+const clockRadius = computed(() => {
+    return config?.dialRadius ?? DefaultConfig.dialRadius
+})
 
 const clock = shallowRef<UseClock | null>(null)
 const pointer = ref<HTMLCanvasElement | null>(null)
@@ -48,7 +18,7 @@ onMounted(() => {
     const pointerCanvas = pointer.value
 
     if(dialCanvas && pointerCanvas) {
-        const _clock = new UseClock(dialCanvas, pointerCanvas, config as DeepRequired<ClockConfig>)
+        const _clock = new UseClock(dialCanvas, pointerCanvas, config)
         _clock.renderDial()
             .renderPointer()
         clock.value = _clock
@@ -61,13 +31,13 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="clock"
-         :style="`width: ${config.dial.radius * 2}px; height: ${config.dial.radius * 2}px;`">
+         :style="`width: ${clockRadius * 2}px; height: ${clockRadius * 2}px;`">
         <canvas class="clock-canvas front" ref="pointer"
-                :width="config.dial.radius * 2"
-                :height="config.dial.radius * 2"/>
+                :width="clockRadius * 2"
+                :height="clockRadius * 2"/>
         <canvas class="clock-canvas back" ref="dial"
-                :width="config.dial.radius * 2"
-                :height="config.dial.radius * 2"/>
+                :width="clockRadius * 2"
+                :height="clockRadius * 2"/>
     </div>
 </template>
 

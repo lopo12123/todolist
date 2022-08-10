@@ -1,127 +1,131 @@
-import { minmax } from "@/scripts/util";
+import { minmax, shallowMerge } from "@/scripts/util";
 
+/**
+ * @description 样式配置项
+ * @see DefaultConfig
+ */
 export interface ClockConfig {
     /**
-     * @description 表盘
+     * @description 表盘半径 (px)
+     * @default 75
      */
-    dial: {
-        /**
-         * @description 半径 (px)
-         * @default 75
-         */
-        radius: number
-        /**
-         * @description 颜色 (HEX, #RRGGBB or #RRGGBBAA)
-         * @default #777777
-         */
-        stroke: string
-        /**
-         * @description 粗细 (px)
-         * @default 1
-         */
-        strokeWidth: number
-    }
+    dialRadius: number
     /**
-     * @description 数字
+     * @description 表盘颜色 (HEX, #RRGGBB or #RRGGBBAA)
+     * @default #777777
      */
-    number: {
-        /**
-         * @description 是否显示
-         * @default true
-         */
-        show: boolean
-        /**
-         * @description 数字类型
-         * @default 'Arab'
-         */
-        text: 'Arab' | 'Roma'
-        /**
-         * @description 描边 / 填充
-         * @default 'stroke'
-         */
-        style: 'stroke' | 'fill'
-        /**
-         * @description 颜色 (HEX, #RRGGBB or #RRGGBBAA)
-         * @default #333333
-         */
-        color: string
-    }
+    dialStroke: string
     /**
-     * @description 时针
+     * @description 表盘粗细 (px)
+     * @default 1
      */
-    hour: {
-        /**
-         * @description 长度占半径比例 [0, 1]
-         * @default 0.5
-         */
-        percent: number
-        /**
-         * @description 反向长度 (px)
-         * @deprecated 未实现
-         * @default 3
-         */
-        tail: number
-        /**
-         * @description 颜色 (HEX, #RRGGBB or #RRGGBBAA)
-         * @default #555555
-         */
-        stroke: string
-        /**
-         * @description 粗细 (px)
-         * @default 4
-         */
-        strokeWidth: number
-    }
+    dialStrokeWidth: number
     /**
-     * @description 分针
+     * @description 数字是否显示
+     * @default true
      */
-    minute: {
-        /**
-         * @description 长度占半径比例 [0, 1]
-         * @default 0.6
-         */
-        percent: number
-        /**
-         * @description 反向长度 (px)
-         * @default 4
-         */
-        tail: number
-        /**
-         * @description 颜色 (HEX, #RRGGBB or #RRGGBBAA)
-         * @default #444444
-         */
-        stroke: string
-        /**
-         * @description 粗细 (px)
-         * @default 3
-         */
-        strokeWidth: number
-    }
+    numberShow: boolean
     /**
-     * @description 秒针
+     * @description 数字类型
+     * @default 'Arab'
      */
-    second: {
-        /**
-         * @description 长度占半径比例 [0, 1]
-         * @default 0.7
-         */
-        percent: number
-        /**
-         * @description 反向长度 (px)
-         * @default 5
-         */
-        tail: number
-        /**
-         * @description 颜色 (HEX, #RRGGBB or #RRGGBBAA)
-         * @default #555555
-         */
-        stroke: string
-        /**
-         * @description 粗细 (px)
-         * @default 2
-         */
-        strokeWidth: number
-    }
+    numberText: 'Arab' | 'Roma'
+    /**
+     * @description 数字 描边 / 填充
+     * @default 'stroke'
+     */
+    numberStyle: 'stroke' | 'fill'
+    /**
+     * @description 数字颜色 (HEX, #RRGGBB or #RRGGBBAA)
+     * @default #333333
+     */
+    numberColor: string
+    /**
+     * @description 时针长度占半径比例 [0, 1]
+     * @default 0.5
+     */
+    hourPercent: number
+    /**
+     * @description 时针反向长度 (px)
+     * @deprecated 未实现
+     * @default 3
+     */
+    hourTail: number
+    /**
+     * @description 时针颜色 (HEX, #RRGGBB or #RRGGBBAA)
+     * @default #555555
+     */
+    hourStroke: string
+    /**
+     * @description 时针粗细 (px)
+     * @default 4
+     */
+    hourStrokeWidth: number
+    /**
+     * @description 分针长度占半径比例 [0, 1]
+     * @default 0.6
+     */
+    minutePercent: number
+    /**
+     * @description 分针反向长度 (px)
+     * @default 4
+     */
+    minuteTail: number
+    /**
+     * @description 分针颜色 (HEX, #RRGGBB or #RRGGBBAA)
+     * @default #444444
+     */
+    minuteStroke: string
+    /**
+     * @description 分针粗细 (px)
+     * @default 3
+     */
+    minuteStrokeWidth: number
+    /**
+     * @description 秒针长度占半径比例 [0, 1]
+     * @default 0.7
+     */
+    secondPercent: number
+    /**
+     * @description 秒针反向长度 (px)
+     * @default 5
+     */
+    secondTail: number
+    /**
+     * @description 秒针颜色 (HEX, #RRGGBB or #RRGGBBAA)
+     * @default #555555
+     */
+    secondStroke: string
+    /**
+     * @description 秒针粗细 (px)
+     * @default 2
+     */
+    secondStrokeWidth: number
+}
+
+/**
+ * @description 样式配置项 默认值
+ */
+export const DefaultConfig: ClockConfig = {
+    dialRadius: 75,
+    dialStroke: '#777777',
+    dialStrokeWidth: 1,
+    hourPercent: 0.5,
+    hourTail: 3,
+    hourStroke: '#555555',
+    hourStrokeWidth: 4,
+    minutePercent: 0.6,
+    minuteTail: 4,
+    minuteStroke: '#444444',
+    minuteStrokeWidth: 3,
+    secondPercent: 0.7,
+    secondTail: 5,
+    secondStroke: '#555555',
+    secondStrokeWidth: 2,
+    numberShow: true,
+    numberText: 'Arab',
+    numberStyle: 'stroke',
+    numberColor: '#333333',
 }
 
 /**
@@ -135,7 +139,7 @@ const ClockNumber = {
 class UseClock {
     #dialCvs: HTMLCanvasElement
     #pointerCvs: HTMLCanvasElement
-    #config: ClockConfig
+    readonly #config: ClockConfig
     #timerId: any
 
     private setStroke(
@@ -167,44 +171,44 @@ class UseClock {
     constructor(
         dialCanvas: HTMLCanvasElement,
         pointerCanvas: HTMLCanvasElement,
-        clockConfig: ClockConfig) {
+        clockConfig?: Partial<ClockConfig>) {
         this.#dialCvs = dialCanvas
         this.#pointerCvs = pointerCanvas
-        this.#config = clockConfig
+        this.#config = clockConfig ? shallowMerge(clockConfig, DefaultConfig) : DefaultConfig
     }
 
     renderDial(): UseClock {
         const ctx = this.#dialCvs.getContext('2d')!
-        const { radius, stroke, strokeWidth } = this.#config.dial
+        const { dialRadius, dialStroke, dialStrokeWidth } = this.#config ?? DefaultConfig
 
         // 表盘外圈
         ctx.beginPath()
-        ctx.arc(radius, radius, radius - strokeWidth, 0, Math.PI * 2)
-        this.setStroke(ctx, stroke, strokeWidth)
+        ctx.arc(dialRadius, dialRadius, dialRadius - dialStrokeWidth, 0, Math.PI * 2)
+        this.setStroke(ctx, dialStroke, dialStrokeWidth)
             .stroke()
         ctx.closePath()
 
         // 数字
-        const { show, text, style, color } = this.#config.number
-        if(show) {
-            const fontSize = minmax(0.16 * radius, 12, 24)
-            const fontRadius = radius - fontSize
+        const { numberShow, numberText, numberStyle, numberColor } = this.#config
+        if(numberShow) {
+            const fontSize = minmax(0.16 * dialRadius, 12, 24)
+            const fontRadius = dialRadius - fontSize
             ctx.beginPath()
             ctx.font = `${ fontSize }px san-serif`
             ctx.textAlign = 'center'
-            if(style === 'stroke') {
-                this.setStroke(ctx, color, 0.5)
-                ClockNumber[text].forEach((txt, idx) => {
-                    const _x = radius + parseFloat((fontRadius * Math.sin(Math.PI / 6 * idx)).toFixed(2))
-                    const _y = radius + fontSize / 2 + parseFloat((fontRadius * -Math.cos(Math.PI / 6 * idx)).toFixed(2))
+            if(numberStyle === 'stroke') {
+                this.setStroke(ctx, numberColor, 0.5)
+                ClockNumber[numberText].forEach((txt, idx) => {
+                    const _x = dialRadius + parseFloat((fontRadius * Math.sin(Math.PI / 6 * idx)).toFixed(2))
+                    const _y = dialRadius + fontSize / 2 + parseFloat((fontRadius * -Math.cos(Math.PI / 6 * idx)).toFixed(2))
                     ctx.strokeText(txt, _x, _y, fontSize)
                 })
             }
             else {
-                this.setFill(ctx, color)
-                ClockNumber[text].forEach((txt, idx) => {
-                    const _x = radius + parseFloat((fontRadius * Math.sin(Math.PI / 6 * idx)).toFixed(2))
-                    const _y = radius + fontSize / 2 + parseFloat((fontRadius * -Math.cos(Math.PI / 6 * idx)).toFixed(2))
+                this.setFill(ctx, numberColor)
+                ClockNumber[numberText].forEach((txt, idx) => {
+                    const _x = dialRadius + parseFloat((fontRadius * Math.sin(Math.PI / 6 * idx)).toFixed(2))
+                    const _y = dialRadius + fontSize / 2 + parseFloat((fontRadius * -Math.cos(Math.PI / 6 * idx)).toFixed(2))
                     ctx.fillText(txt, _x, _y, fontSize)
                 })
             }
@@ -215,23 +219,23 @@ class UseClock {
     }
 
     private clearCanvas(ctx: CanvasRenderingContext2D) {
-        const radius = this.#config.dial.radius
+        const radius = this.#config.dialRadius
         ctx.clearRect(0, 0, 2 * radius, 2 * radius)
         return this
     }
 
     private renderHour(ctx: CanvasRenderingContext2D, inHour: number) {
-        const radius = this.#config.dial.radius
-        const { percent, stroke, strokeWidth } = this.#config.hour
+        const radius = this.#config.dialRadius
+        const { hourPercent, hourStroke, hourStrokeWidth } = this.#config
 
-        const len = radius * percent
+        const len = radius * hourPercent
         const _x = radius + parseFloat((len * Math.sin(Math.PI / 6 * inHour)).toFixed(2))
         const _y = radius + parseFloat((len * -Math.cos(Math.PI / 6 * inHour)).toFixed(2))
 
         ctx.beginPath()
         ctx.moveTo(radius, radius)
         ctx.lineTo(_x, _y)
-        this.setStroke(ctx, stroke, strokeWidth)
+        this.setStroke(ctx, hourStroke, hourStrokeWidth)
             .stroke()
         ctx.closePath()
 
@@ -239,17 +243,17 @@ class UseClock {
     }
 
     private renderMin(ctx: CanvasRenderingContext2D, inMin: number) {
-        const radius = this.#config.dial.radius
-        const { percent, stroke, strokeWidth } = this.#config.minute
+        const radius = this.#config.dialRadius
+        const { minutePercent, minuteStroke, minuteStrokeWidth } = this.#config
 
-        const len = radius * percent
+        const len = radius * minutePercent
         const _x = radius + parseFloat((len * Math.sin(Math.PI / 30 * inMin)).toFixed(2))
         const _y = radius + parseFloat((len * -Math.cos(Math.PI / 30 * inMin)).toFixed(2))
 
         ctx.beginPath()
         ctx.moveTo(radius, radius)
         ctx.lineTo(_x, _y)
-        this.setStroke(ctx, stroke, strokeWidth)
+        this.setStroke(ctx, minuteStroke, minuteStrokeWidth)
             .stroke()
         ctx.closePath()
 
@@ -257,17 +261,17 @@ class UseClock {
     }
 
     private renderSec(ctx: CanvasRenderingContext2D, inSec: number) {
-        const radius = this.#config.dial.radius
-        const { percent, stroke, strokeWidth } = this.#config.second
+        const radius = this.#config.dialRadius
+        const { secondPercent, secondStroke, secondStrokeWidth } = this.#config
 
-        const len = radius * percent
+        const len = radius * secondPercent
         const _x = radius + parseFloat((len * Math.sin(Math.PI / 30 * inSec)).toFixed(2))
         const _y = radius + parseFloat((len * -Math.cos(Math.PI / 30 * inSec)).toFixed(2))
 
         ctx.beginPath()
         ctx.moveTo(radius, radius)
         ctx.lineTo(_x, _y)
-        this.setStroke(ctx, stroke, strokeWidth)
+        this.setStroke(ctx, secondStroke, secondStrokeWidth)
             .stroke()
         ctx.closePath()
 
