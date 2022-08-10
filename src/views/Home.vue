@@ -36,7 +36,7 @@ const clockConfig: Partial<ClockConfig> = {
 
     .clock-container {
         position: relative;
-        width: 50%;
+        width: 200px;
         height: 100%;
         display: flex;
         align-items: center;
@@ -45,12 +45,18 @@ const clockConfig: Partial<ClockConfig> = {
 
     .overview-container {
         position: relative;
-        width: 50%;
+        width: calc(100% - 200px);
         height: 100%;
         display: flex;
-        flex-direction: column;
         align-items: center;
         justify-content: center;
+
+        &::before {
+            content: "";
+            width: 1px;
+            height: 80%;
+            background-color: #ccc;
+        }
     }
 }
 </style>
