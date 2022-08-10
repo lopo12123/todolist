@@ -1,10 +1,16 @@
 <script lang="ts" setup>
+import { useRouter } from "vue-router";
 
+const router = useRouter()
+
+const jump = () => {
+    router.push({ name: 'Overview' })
+}
 </script>
 
 <template>
     <div class="calendar-view">
-        Calendar
+        <button @click="jump" style="position:absolute;bottom: 0">To Overview</button>
     </div>
 </template>
 
@@ -13,8 +19,6 @@
     position: relative;
     width: 100%;
     height: 100%;
-    padding: 8px;
-    border: solid 1px #333;
-    border-radius: 8px;
+
 }
 </style>
