@@ -1,116 +1,16 @@
 <script lang="ts" setup>
-import {onBeforeUnmount, onMounted, ref} from "vue";
+import { onBeforeUnmount, onMounted, ref, shallowRef } from "vue";
+import { ClockConfig, UseClock } from "@/components/Clock/useClock";
+import { DeepPartial, DeepRequired } from "@/scripts/util";
 
-export interface ClockConfig {
-    /**
-     * @description 表盘
-     */
-    dial?: {
-        /**
-         * @description 半径 (px)
-         * @default 75
-         */
-        radius?: number
-        /**
-         * @description 颜色 (HEX, #RRGGBB)
-         * @default #777777
-         */
-        stroke?: string
-        /**
-         * @description 粗细 (px)
-         * @default 2
-         */
-        strokeWidth?: number
-    }
-    /**
-     * @description 时针
-     */
-    hour?: {
-        /**
-         * @description 长度占半径比例 [0, 1]
-         * @default 0.5
-         */
-        percent?: number
-        /**
-         * @description 反向长度 (px)
-         * @default 3
-         */
-        tail?: number
-        /**
-         * @description 颜色 HEX in #RRGGBB
-         * @default #333333
-         */
-        stroke?: string
-        /**
-         * @description 粗细 (px)
-         * @default 5
-         */
-        strokeWidth?: number
-    }
-    /**
-     * @description 分针
-     */
-    minute?: {
-        /**
-         * @description 长度占半径比例 [0, 1]
-         * @default 0.6
-         */
-        percent?: number
-        /**
-         * @description 反向长度 (px)
-         * @default 4
-         */
-        tail?: number
-        /**
-         * @description 颜色 HEX in #RRGGBB
-         * @default #444444
-         */
-        stroke?: string
-        /**
-         * @description 粗细 (px)
-         * @default 4
-         */
-        strokeWidth?: number
-    }
-    /**
-     * @description 秒针
-     */
-    second?: {
-        /**
-         * @description 长度占半径比例 [0, 1]
-         * @default 0.6
-         */
-        percent?: number
-        /**
-         * @description 反向长度 (px)
-         * @default 5
-         */
-        tail?: number
-        /**
-         * @description 颜色 HEX in #RRGGBB
-         * @default #555555
-         */
-        stroke?: string
-        /**
-         * @description 粗细 (px)
-         * @default 3
-         */
-        strokeWidth?: number
-    }
-    /**
-     * @description 数字类型
-     */
-    number?: 'roma' | 'arab'
-}
-
-const {config} = withDefaults(defineProps<{
-    config?: ClockConfig
+const { config } = withDefaults(defineProps<{
+    config?: DeepPartial<ClockConfig>
 }>(), {
     config: () => ({
         dial: {
             radius: 75,
             stroke: '#777777',
-            strokeWidth: 2
+            strokeWidth: 1
         },
         hour: {
             percent: 0.5,
@@ -130,10 +30,16 @@ const {config} = withDefaults(defineProps<{
             stroke: '#555555',
             strokeWidth: 3
         },
-        number: 'roma',
+        number: {
+            show: true,
+            text: 'Arab',
+            style: 'stroke',
+            color: '#333333'
+        },
     })
 })
 
+const clock = shallowRef<UseClock | null>(null)
 const pointer = ref<HTMLCanvasElement | null>(null)
 const dial = ref<HTMLCanvasElement | null>(null)
 
@@ -164,9 +70,12 @@ onMounted(() => {
     const dialCanvas = dial.value
     const pointerCanvas = pointer.value
 
-    if (dialCanvas && pointerCanvas) {
-        renderDial(dialCanvas)
-        renderPointer(pointerCanvas)
+    if(dialCanvas && pointerCanvas) {
+        const _clock = new UseClock(dialCanvas, pointerCanvas, config as DeepRequired<ClockConfig>)
+        _clock.renderDial()
+        clock.value = _clock
+        // renderDial(dialCanvas)
+        // renderPointer(pointerCanvas)
     }
 })
 onBeforeUnmount(() => {
