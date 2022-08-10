@@ -12,22 +12,20 @@ const routes: RouteRecordRaw[] = [
     {
         path: '/home',
         name: 'Home',
-        component: Home
-    },
-    {
-        path: '/calendar',
-        name: 'Calendar',
-        component: () => import("@/views/Calendar.vue")
-    },
-    {
-        path: '/order-list',
-        name: 'OrderList',
-        component: () => import("@/views/OrderList.vue")
-    },
-    {
-        path: '/full-screen',
-        name: 'FullScreen',
-        component: () => import("@/views/FullScreen.vue")
+        component: Home,
+        redirect: { name: 'Calendar' },
+        children: [
+            {
+                path: '/calendar',
+                name: 'Calendar',
+                component: () => import("@/views/Calendar.vue")
+            },
+            {
+                path: '/overview',
+                name: 'Overview',
+                component: () => import("@/views/Overview.vue")
+            },
+        ]
     },
     {
         path: '/blank',
