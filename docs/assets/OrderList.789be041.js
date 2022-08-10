@@ -1,1 +1,0 @@
-import{d as s,c as t,u as o,o as _,_ as r}from"./index.d9cd88c4.js";const c={class:"order-list-view"},a=s({__name:"OrderList",setup(n){const e=o();return setTimeout(()=>{e.push({name:"Home"})},3e3),(d,i)=>(_(),t("div",c," OrderList "))}});const u=r(a,[["__scopeId","data-v-ba39c8e8"]]);export{u as default};

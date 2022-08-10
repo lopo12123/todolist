@@ -1,0 +1,1 @@
+import{d as s,c as a,a as o,e as c,o as _,u as n,_ as r}from"./index.cecae7c2.js";const u={class:"temp-class"},d=c(" \u65B0\u5EFA "),p=s({__name:"Create",setup(l){const e=n(),t=()=>{e.push({name:"Calendar"})};return(i,m)=>(_(),a("div",u,[o("button",{onClick:t},"\u8FD4\u56DE"),d]))}});const f=r(p,[["__scopeId","data-v-c6eb043d"]]);export{f as default};
