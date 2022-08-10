@@ -15,20 +15,20 @@ const { config } = withDefaults(defineProps<{
         hour: {
             percent: 0.5,
             tail: 3,
-            stroke: '#333333',
-            strokeWidth: 5
+            stroke: '#555555',
+            strokeWidth: 4
         },
         minute: {
             percent: 0.6,
             tail: 4,
             stroke: '#444444',
-            strokeWidth: 4
+            strokeWidth: 3
         },
         second: {
-            percent: 0.6,
+            percent: 0.7,
             tail: 5,
             stroke: '#555555',
-            strokeWidth: 3
+            strokeWidth: 2
         },
         number: {
             show: true,
@@ -73,6 +73,7 @@ onMounted(() => {
     if(dialCanvas && pointerCanvas) {
         const _clock = new UseClock(dialCanvas, pointerCanvas, config as DeepRequired<ClockConfig>)
         _clock.renderDial()
+            .renderPointer()
         clock.value = _clock
         // renderDial(dialCanvas)
         // renderPointer(pointerCanvas)
@@ -106,8 +107,6 @@ onBeforeUnmount(() => {
         position: absolute;
         width: 100%;
         height: 100%;
-        inset: 0;
-        border: solid 1px #333333;
     }
 
     .front {

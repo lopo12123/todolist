@@ -11,7 +11,7 @@ export interface ClockConfig {
          */
         radius: number
         /**
-         * @description 颜色 (HEX, #RRGGBB)
+         * @description 颜色 (HEX, #RRGGBB or #RRGGBBAA)
          * @default #777777
          */
         stroke: string
@@ -41,7 +41,7 @@ export interface ClockConfig {
          */
         style: 'stroke' | 'fill'
         /**
-         * @description 颜色 (HEX, #RRGGBB)
+         * @description 颜色 (HEX, #RRGGBB or #RRGGBBAA)
          * @default #333333
          */
         color: string
@@ -57,17 +57,18 @@ export interface ClockConfig {
         percent: number
         /**
          * @description 反向长度 (px)
+         * @deprecated 未实现
          * @default 3
          */
         tail: number
         /**
-         * @description 颜色 (HEX, #RRGGBB)
-         * @default #333333
+         * @description 颜色 (HEX, #RRGGBB or #RRGGBBAA)
+         * @default #555555
          */
         stroke: string
         /**
          * @description 粗细 (px)
-         * @default 5
+         * @default 4
          */
         strokeWidth: number
     }
@@ -86,13 +87,13 @@ export interface ClockConfig {
          */
         tail: number
         /**
-         * @description 颜色 (HEX, #RRGGBB)
+         * @description 颜色 (HEX, #RRGGBB or #RRGGBBAA)
          * @default #444444
          */
         stroke: string
         /**
          * @description 粗细 (px)
-         * @default 4
+         * @default 3
          */
         strokeWidth: number
     }
@@ -102,7 +103,7 @@ export interface ClockConfig {
     second: {
         /**
          * @description 长度占半径比例 [0, 1]
-         * @default 0.6
+         * @default 0.7
          */
         percent: number
         /**
@@ -111,13 +112,13 @@ export interface ClockConfig {
          */
         tail: number
         /**
-         * @description 颜色 (HEX, #RRGGBB)
+         * @description 颜色 (HEX, #RRGGBB or #RRGGBBAA)
          * @default #555555
          */
         stroke: string
         /**
          * @description 粗细 (px)
-         * @default 3
+         * @default 2
          */
         strokeWidth: number
     }
@@ -135,11 +136,13 @@ class UseClock {
     #dialCvs: HTMLCanvasElement
     #pointerCvs: HTMLCanvasElement
     #config: ClockConfig
+    #timerId: any
 
     private setStroke(
         ctx: CanvasRenderingContext2D,
         stroke: string | CanvasGradient | CanvasPattern,
         strokeWidth: number): CanvasRenderingContext2D {
+        ctx.lineCap = 'round'
         ctx.strokeStyle = stroke
         ctx.lineWidth = strokeWidth
         return ctx
@@ -153,6 +156,14 @@ class UseClock {
         return ctx
     }
 
+    private getHMS() {
+        const _date = new Date()
+        const h = _date.getHours() % 12
+        const m = _date.getMinutes()
+        const s = _date.getSeconds()
+        return { h, m, s }
+    }
+
     constructor(
         dialCanvas: HTMLCanvasElement,
         pointerCanvas: HTMLCanvasElement,
@@ -163,8 +174,8 @@ class UseClock {
     }
 
     renderDial(): UseClock {
-        const { radius, stroke, strokeWidth } = this.#config.dial
         const ctx = this.#dialCvs.getContext('2d')!
+        const { radius, stroke, strokeWidth } = this.#config.dial
 
         // 表盘外圈
         ctx.beginPath()
@@ -203,8 +214,88 @@ class UseClock {
         return this
     }
 
-    renderPointer(tick: boolean = true) {
+    private clearCanvas(ctx: CanvasRenderingContext2D) {
+        const radius = this.#config.dial.radius
+        ctx.clearRect(0, 0, 2 * radius, 2 * radius)
+        return this
+    }
 
+    private renderHour(ctx: CanvasRenderingContext2D, inHour: number) {
+        const radius = this.#config.dial.radius
+        const { percent, stroke, strokeWidth } = this.#config.hour
+
+        const len = radius * percent
+        const _x = radius + parseFloat((len * Math.sin(Math.PI / 6 * inHour)).toFixed(2))
+        const _y = radius + parseFloat((len * -Math.cos(Math.PI / 6 * inHour)).toFixed(2))
+
+        ctx.beginPath()
+        ctx.moveTo(radius, radius)
+        ctx.lineTo(_x, _y)
+        this.setStroke(ctx, stroke, strokeWidth)
+            .stroke()
+        ctx.closePath()
+
+        return this
+    }
+
+    private renderMin(ctx: CanvasRenderingContext2D, inMin: number) {
+        const radius = this.#config.dial.radius
+        const { percent, stroke, strokeWidth } = this.#config.minute
+
+        const len = radius * percent
+        const _x = radius + parseFloat((len * Math.sin(Math.PI / 30 * inMin)).toFixed(2))
+        const _y = radius + parseFloat((len * -Math.cos(Math.PI / 30 * inMin)).toFixed(2))
+
+        ctx.beginPath()
+        ctx.moveTo(radius, radius)
+        ctx.lineTo(_x, _y)
+        this.setStroke(ctx, stroke, strokeWidth)
+            .stroke()
+        ctx.closePath()
+
+        return this
+    }
+
+    private renderSec(ctx: CanvasRenderingContext2D, inSec: number) {
+        const radius = this.#config.dial.radius
+        const { percent, stroke, strokeWidth } = this.#config.second
+
+        const len = radius * percent
+        const _x = radius + parseFloat((len * Math.sin(Math.PI / 30 * inSec)).toFixed(2))
+        const _y = radius + parseFloat((len * -Math.cos(Math.PI / 30 * inSec)).toFixed(2))
+
+        ctx.beginPath()
+        ctx.moveTo(radius, radius)
+        ctx.lineTo(_x, _y)
+        this.setStroke(ctx, stroke, strokeWidth)
+            .stroke()
+        ctx.closePath()
+
+        return this
+    }
+
+    private renderHMS() {
+        const ctx = this.#pointerCvs.getContext('2d')!
+        const { h, m, s } = this.getHMS()
+
+        const inHour = h + m / 60 + s / 3600
+        const inMin = m + s / 60
+
+        this.clearCanvas(ctx)
+            .renderHour(ctx, inHour)
+            .renderMin(ctx, inMin)
+            .renderSec(ctx, s)
+    }
+
+    renderPointer() {
+        this.renderHMS()
+        this.#timerId = setInterval(() => {
+            this.renderHMS()
+        }, 1000)
+    }
+
+    stopTick() {
+        clearInterval(this.#timerId)
     }
 }
 
