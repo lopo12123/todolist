@@ -3,14 +3,23 @@ import { useRouter } from "vue-router";
 
 const router = useRouter()
 
-const jump = () => {
-    router.push({ name: 'Overview' })
+const jump = (name: string) => {
+    router.push({ name })
 }
 </script>
 
 <template>
     <div class="calendar-view">
-        <button @click="jump" style="position:absolute;bottom: 0">To Overview</button>
+        <button @click="jump('Specific')">To Specific</button>
+        <br>
+        <button @click="jump('Overview')">To Overview</button>
+        <br>
+        <button @click="jump('Create')">To Create</button>
+        <br>
+        <button @click="jump('Setting')">To Setting</button>
+        <br>
+
+        <span>echarts 日历</span>
     </div>
 </template>
 
@@ -19,6 +28,7 @@ const jump = () => {
     position: relative;
     width: 100%;
     height: 100%;
+    background-color: antiquewhite;
 
 }
 </style>

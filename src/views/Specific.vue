@@ -9,17 +9,17 @@ const back = () => {
 </script>
 
 <template>
-    <div class="overview-view">
+    <div class="temp-class">
         <button @click="back">返回</button>
-        <span>总览</span>
+        <span>具体某天条目</span>
     </div>
 </template>
 
 <style lang="scss" scoped>
-.overview-view {
+.temp-class {
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: aliceblue;
+    background-color: aqua;
 }
 </style>

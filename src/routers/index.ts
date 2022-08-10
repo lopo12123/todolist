@@ -16,12 +16,27 @@ const routes: RouteRecordRaw[] = [
         redirect: { name: 'Calendar' },
         children: [
             {
-                path: '/calendar',
+                path: 'calendar',
                 name: 'Calendar',
                 component: () => import("@/views/Calendar.vue")
             },
             {
-                path: '/overview',
+                path: 'create',
+                name: 'Create',
+                component: () => import("@/views/Create.vue")
+            },
+            {
+                path: 'setting',
+                name: 'Setting',
+                component: () => import("@/views/Setting.vue")
+            },
+            {
+                path: 'specific',
+                name: 'Specific',
+                component: () => import("@/views/Specific.vue")
+            },
+            {
+                path: 'overview',
                 name: 'Overview',
                 component: () => import("@/views/Overview.vue")
             },
