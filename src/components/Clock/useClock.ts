@@ -179,7 +179,7 @@ class UseClock {
 
         // 表盘外圈
         ctx.beginPath()
-        ctx.arc(radius, radius, radius, 0, Math.PI * 2)
+        ctx.arc(radius, radius, radius - strokeWidth, 0, Math.PI * 2)
         this.setStroke(ctx, stroke, strokeWidth)
             .stroke()
         ctx.closePath()
