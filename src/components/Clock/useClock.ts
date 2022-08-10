@@ -17,7 +17,7 @@ export interface ClockConfig {
     dialStroke: string
     /**
      * @description 表盘粗细 (px)
-     * @default 1
+     * @default 2
      */
     dialStrokeWidth: number
     /**
@@ -109,7 +109,7 @@ export interface ClockConfig {
 export const DefaultConfig: ClockConfig = {
     dialRadius: 75,
     dialStroke: '#777777',
-    dialStrokeWidth: 1,
+    dialStrokeWidth: 2,
     hourPercent: 0.5,
     hourTail: 3,
     hourStroke: '#555555',

@@ -2,11 +2,11 @@
 import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from "vue";
 import { ClockConfig, DefaultConfig, UseClock } from "@/components/Clock/useClock";
 
-const { config } = defineProps<{
+const props = defineProps<{
     config?: Partial<ClockConfig>
 }>()
 const clockRadius = computed(() => {
-    return config?.dialRadius ?? DefaultConfig.dialRadius
+    return props.config?.dialRadius ?? DefaultConfig.dialRadius
 })
 
 const clock = shallowRef<UseClock | null>(null)
@@ -18,7 +18,7 @@ onMounted(() => {
     const pointerCanvas = pointer.value
 
     if(dialCanvas && pointerCanvas) {
-        const _clock = new UseClock(dialCanvas, pointerCanvas, config)
+        const _clock = new UseClock(dialCanvas, pointerCanvas, props.config)
         _clock.renderDial()
             .renderPointer()
         clock.value = _clock
@@ -44,9 +44,7 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .clock {
     position: relative;
-    display: flex;
-    align-content: center;
-    justify-content: center;
+    display: block;
 
     .clock-canvas {
         position: absolute;
