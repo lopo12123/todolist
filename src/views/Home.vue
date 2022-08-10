@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {useRouter} from "vue-router";
+import { useRouter } from "vue-router";
 import Clock from "@/components/Clock/Clock.vue";
 
 const router = useRouter()
@@ -9,8 +9,6 @@ const router = useRouter()
 <template>
     <div class="home-view"
          data-tauri-drag-region>
-        home view <br>
-
         <Clock/>
     </div>
 </template>
