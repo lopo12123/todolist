@@ -142,7 +142,7 @@ class UseClock {
     readonly #config: ClockConfig
     #timerId: any
 
-    private setStroke(
+    private static setStroke(
         ctx: CanvasRenderingContext2D,
         stroke: string | CanvasGradient | CanvasPattern,
         strokeWidth: number): CanvasRenderingContext2D {
@@ -152,7 +152,7 @@ class UseClock {
         return ctx
     }
 
-    private setFill(
+    private static setFill(
         ctx: CanvasRenderingContext2D,
         fill: string | CanvasGradient | CanvasPattern
     ) {
@@ -160,7 +160,7 @@ class UseClock {
         return ctx
     }
 
-    private getHMS() {
+    private static getHMS() {
         const _date = new Date()
         const h = _date.getHours() % 12
         const m = _date.getMinutes()
@@ -184,7 +184,7 @@ class UseClock {
         // 表盘外圈
         ctx.beginPath()
         ctx.arc(dialRadius, dialRadius, dialRadius - dialStrokeWidth, 0, Math.PI * 2)
-        this.setStroke(ctx, dialStroke, dialStrokeWidth)
+        UseClock.setStroke(ctx, dialStroke, dialStrokeWidth)
             .stroke()
         ctx.closePath()
 
@@ -197,7 +197,7 @@ class UseClock {
             ctx.font = `${ fontSize }px san-serif`
             ctx.textAlign = 'center'
             if(numberStyle === 'stroke') {
-                this.setStroke(ctx, numberColor, 0.5)
+                UseClock.setStroke(ctx, numberColor, 0.5)
                 ClockNumber[numberText].forEach((txt, idx) => {
                     const _x = dialRadius + parseFloat((fontRadius * Math.sin(Math.PI / 6 * idx)).toFixed(2))
                     const _y = dialRadius + fontSize / 2 + parseFloat((fontRadius * -Math.cos(Math.PI / 6 * idx)).toFixed(2))
@@ -205,7 +205,7 @@ class UseClock {
                 })
             }
             else {
-                this.setFill(ctx, numberColor)
+                UseClock.setFill(ctx, numberColor)
                 ClockNumber[numberText].forEach((txt, idx) => {
                     const _x = dialRadius + parseFloat((fontRadius * Math.sin(Math.PI / 6 * idx)).toFixed(2))
                     const _y = dialRadius + fontSize / 2 + parseFloat((fontRadius * -Math.cos(Math.PI / 6 * idx)).toFixed(2))
@@ -235,7 +235,7 @@ class UseClock {
         ctx.beginPath()
         ctx.moveTo(radius, radius)
         ctx.lineTo(_x, _y)
-        this.setStroke(ctx, hourStroke, hourStrokeWidth)
+        UseClock.setStroke(ctx, hourStroke, hourStrokeWidth)
             .stroke()
         ctx.closePath()
 
@@ -253,7 +253,7 @@ class UseClock {
         ctx.beginPath()
         ctx.moveTo(radius, radius)
         ctx.lineTo(_x, _y)
-        this.setStroke(ctx, minuteStroke, minuteStrokeWidth)
+        UseClock.setStroke(ctx, minuteStroke, minuteStrokeWidth)
             .stroke()
         ctx.closePath()
 
@@ -271,7 +271,7 @@ class UseClock {
         ctx.beginPath()
         ctx.moveTo(radius, radius)
         ctx.lineTo(_x, _y)
-        this.setStroke(ctx, secondStroke, secondStrokeWidth)
+        UseClock.setStroke(ctx, secondStroke, secondStrokeWidth)
             .stroke()
         ctx.closePath()
 
@@ -280,7 +280,7 @@ class UseClock {
 
     private renderHMS() {
         const ctx = this.#pointerCvs.getContext('2d')!
-        const { h, m, s } = this.getHMS()
+        const { h, m, s } = UseClock.getHMS()
 
         const inHour = h + m / 60 + s / 3600
         const inMin = m + s / 60
