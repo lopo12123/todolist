@@ -18,5 +18,7 @@ export default defineConfig({
     },
     build: {
         target: [ 'es2021', 'chrome97' ],
+        outDir: './docs',
+        emptyOutDir: true
     },
 })

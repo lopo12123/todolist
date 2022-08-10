@@ -37,35 +37,12 @@ const { config } = withDefaults(defineProps<{
             color: '#333333'
         },
     })
-})
+}) as { config: ClockConfig }
 
 const clock = shallowRef<UseClock | null>(null)
 const pointer = ref<HTMLCanvasElement | null>(null)
 const dial = ref<HTMLCanvasElement | null>(null)
 
-const timerId = ref<any>()
-const renderPointer = (pointerEl: HTMLCanvasElement) => {
-    const _date = new Date()
-    const _h = _date.getHours()
-    const _m = _date.getMinutes()
-    const _s = _date.getSeconds()
-
-    // 时针
-}
-
-const renderDial = (dialEl: HTMLCanvasElement) => {
-    const ctx = dialEl.getContext('2d')!
-    // 表盘外圈
-    const radius = config.dial!.radius!
-    ctx.strokeStyle = config.dial!.stroke!
-    console.log(config.dial!.stroke!)
-    ctx.beginPath()
-    ctx.arc(radius, radius, radius, 0, Math.PI * 2)
-    ctx.stroke()
-    ctx.closePath()
-
-    // 刻度
-}
 onMounted(() => {
     const dialCanvas = dial.value
     const pointerCanvas = pointer.value
@@ -75,12 +52,10 @@ onMounted(() => {
         _clock.renderDial()
             .renderPointer()
         clock.value = _clock
-        // renderDial(dialCanvas)
-        // renderPointer(pointerCanvas)
     }
 })
 onBeforeUnmount(() => {
-    clearInterval(timerId.value)
+    clock.value?.stopTick()
 })
 </script>
 
