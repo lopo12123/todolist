@@ -16,7 +16,7 @@
 .collapse-leave-active {
     position: absolute !important;
     overflow: hidden !important;
-    transition: all 1s ease;
+    transition: all 0.5s ease;
 }
 
 .collapse-enter-from,
@@ -52,7 +52,7 @@
 // region slide
 .slide-enter-active,
 .slide-leave-active {
-    transition: all 0.75s ease-out;
+    transition: all 0.5s ease-out;
     overflow: hidden;
 }
 
@@ -100,7 +100,7 @@
 .scale-slide-enter-active,
 .scale-slide-leave-active {
     position: absolute;
-    transition: all 0.85s ease;
+    transition: all 0.5s ease;
 }
 
 .scale-slide-enter-from {
