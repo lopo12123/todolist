@@ -799,10 +799,10 @@ vue-tsc@^0.38.4:
   dependencies:
     "@volar/vue-typescript" "0.38.9"
 
-vue3clock@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/vue3clock/-/vue3clock-0.1.0.tgz#1ff5887a40f7f5fafc14f795a0df61d41795e14c"
-  integrity sha512-aSN/Mgm535PR6a7tZ0X9V2GzIyBqWeOC6jYce7W5G6pkm4LjRBGZwvzR7tlegER8/N48VD1awWB64OqX4DZjAA==
+vue3clock@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/vue3clock/-/vue3clock-0.1.2.tgz#1a1506a858ef6024b215afb12ddf0418b6947ca6"
+  integrity sha512-2tjxhYxDQQmxYm+8RQvA2m1x+qd+QANm4OpXUwwdkdkiuEKRIxXYcqwOhNU0Ng1/JmspEF2lyOcfMlEIvQT5MA==
   dependencies:
     vue "^3.2.37"
 
