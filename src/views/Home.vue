@@ -1,17 +1,12 @@
 <script lang="ts" setup>
-import Clock from "@/components/Clock/Clock.vue";
-import { ClockConfig } from "@/components/Clock/useClock";
-
-const clockConfig: Partial<ClockConfig> = {
-    dialRadius: 75
-}
+import Vue3Clock from "vue3clock";
 </script>
 
 <template>
     <div class="home-view"
          data-tauri-drag-region>
         <div class="clock-container">
-            <Clock :config="clockConfig"/>
+            <Vue3Clock/>
         </div>
         <div class="overview-container">
             <router-view v-slot="{Component}">
