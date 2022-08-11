@@ -1,34 +1,21 @@
 <script lang="ts" setup>
-import { useRouter } from "vue-router";
+import Banner from "./Calendar/Banner.vue";
+import CalenderChart from "./Calendar/CalendarChart.vue";
+import WithBanner from "../layouts/WithBanner.vue";
 
-const router = useRouter()
-
-const jump = (name: string) => {
-    router.push({ name })
-}
 </script>
 
 <template>
-    <div class="calendar-view">
-        <button @click="jump('Specific')">To Specific</button>
-        <br>
-        <button @click="jump('Overview')">To Overview</button>
-        <br>
-        <button @click="jump('Create')">To Create</button>
-        <br>
-        <button @click="jump('Setting')">To Setting</button>
-        <br>
-
-        <span>echarts 日历</span>
-    </div>
+    <WithBanner>
+        <template #banner>
+            <Banner/>
+        </template>
+        <template #body>
+            <CalenderChart/>
+        </template>
+    </WithBanner>
 </template>
 
 <style lang="scss" scoped>
-.calendar-view {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-color: antiquewhite;
 
-}
 </style>
