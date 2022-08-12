@@ -34,7 +34,7 @@ const generateCalendarOption = (year: number, month: number, list: CalendarTodoD
     const _config: EChartsOption = {
         tooltip: {
             confine: true,
-            position: point => point,
+            position: point => [point[0], point[1] - 30],
             formatter: (param) => {
                 // @ts-ignore
                 return param.data[1].count === 0 ? '' : `${ param.data[1].count } 项代办`
@@ -61,12 +61,16 @@ const generateCalendarOption = (year: number, month: number, list: CalendarTodoD
                 cellSize: 'auto',
                 range: `${ year }-${ month }`,
                 dayLabel: {
-                    nameMap: 'ZH',
+                    nameMap: ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'],
                     firstDay: 1,
-                    color: '#333',
-                    fontStyle: 'italic',
-                    fontSize: 8,
-                    lineHeight: 5
+                    color: '#ddd',
+                    fontSize: 14,
+                    fontFamily: 'UniDream-LED',
+                    lineHeight: 5,
+                    textShadowColor: '#000',
+                    textShadowBlur: 1,
+                    textShadowOffsetX: 1,
+                    textShadowOffsetY: 1,
                 },
                 monthLabel: {
                     show: false
@@ -102,11 +106,17 @@ const generateCalendarOption = (year: number, month: number, list: CalendarTodoD
                                     type: 'text',
                                     style: {
                                         x: cellPoint[0],
-                                        y: cellPoint[1],
-                                        fill: '#777',
+                                        y: cellPoint[1] - cellHeight / 4,
                                         text: cellValue.date.slice(-2),
                                         fontStyle: 'italic',
-                                        fontSize: 0.4 * cellHeight
+                                        fill: '#ccc',
+                                        textShadowColor: '#000',
+                                        textShadowBlur: 1,
+                                        textShadowOffsetX: 1,
+                                        textShadowOffsetY: 1,
+                                        textAlign: 'center',
+                                        fontSize: 0.7 * cellHeight,
+                                        fontFamily: 'UniDream-LED',
                                     }
                                 }
                             ]
@@ -118,8 +128,8 @@ const generateCalendarOption = (year: number, month: number, list: CalendarTodoD
                                 pathData: iconPath,
                                 x: cellPoint[0] - cellWidth * 0.4,
                                 y: cellPoint[1] - cellHeight * 0.4,
-                                width: cellHeight * 0.5,
-                                height: cellHeight * 0.5
+                                width: cellHeight * 0.4,
+                                height: cellHeight * 0.4
                             },
                             style: {
                                 fill: iconColor(cellValue.count),

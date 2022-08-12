@@ -1,4 +1,5 @@
 import "./styles/transition.scss";
+import "./fonts/fonts.scss";
 import "./styles/index.scss";
 import { createApp } from "vue";
 import { router } from "@/routers";

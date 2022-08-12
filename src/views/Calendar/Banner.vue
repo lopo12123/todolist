@@ -2,12 +2,40 @@
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 
+const emits = defineEmits<{
+    // ()
+}>()
 const router = useRouter()
 
 const year = ref(new Date().getFullYear())
 const month = ref(new Date().getMonth() + 1)
 const doSwitch = (type: 'year+' | 'month+' | 'year-' | 'month-') => {
-
+    switch(type) {
+        case 'year+':
+            year.value += 1
+            break
+        case 'year-':
+            year.value -= 1
+            break
+        case 'month+':
+            if(month.value === 12) {
+                year.value += 1
+                month.value = 1
+            }
+            else {
+                month.value += 1
+            }
+            break
+        case 'month-':
+            if(month.value === 1) {
+                year.value -= 1
+                month.value = 12
+            }
+            else {
+                month.value -= 1
+            }
+            break
+    }
 }
 
 const jump = (name: string) => {
@@ -28,7 +56,7 @@ const jump = (name: string) => {
             <div class="btn" @click="doSwitch('month+')">+</div>
         </div>
         <div class="op-group">
-
+            operates
         </div>
         <!--        <button @click="jump('Specific')">Specific</button>-->
         <!--        <button @click="jump('Overview')">Overview</button>-->
@@ -42,9 +70,14 @@ const jump = (name: string) => {
     position: relative;
     width: 100%;
     height: 100%;
+    padding: 0 20px;
+    color: #ccc;
+    font-size: 16px;
+    font-family: UniDream-LED;
+    text-shadow: #000 1px 1px 1px;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
 
     .year, .month {
         position: relative;
@@ -58,7 +91,6 @@ const jump = (name: string) => {
 
         .num {
             width: 40px;
-            color: #777;
             text-align: center;
         }
 
