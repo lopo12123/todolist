@@ -40,10 +40,10 @@ const generateCalendarOption = (year: number, month: number, list: CalendarTodoD
                 return param.data[1].count === 0 ? '' : `${ param.data[1].count } 项代办`
             },
             padding: [ 3, 5 ],
-            borderColor: '#333',
+            borderColor: '#fff',
             borderWidth: 1,
             borderRadius: 2,
-            backgroundColor: '#3336',
+            backgroundColor: '#333c',
             textStyle: {
                 color: '#fff',
                 fontSize: 12,
