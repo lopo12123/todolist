@@ -52,28 +52,33 @@
 // region slide
 .slide-enter-active,
 .slide-leave-active {
+    position: absolute;
     transition: all 0.5s ease-out;
     overflow: hidden;
 }
 
 .slide-enter-to {
     position: absolute;
+    top: 0;
     right: 0;
 }
 
 .slide-enter-from {
     position: absolute;
+    top: 0;
     right: -100%;
 }
 
 .slide-leave-to {
     position: absolute;
     top: -100%;
+    right: 0;
 }
 
 .slide-leave-from {
     position: absolute;
     top: 0;
+    right: 0;
 }
 
 // endregion

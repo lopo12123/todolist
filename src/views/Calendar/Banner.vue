@@ -9,6 +9,9 @@ const emits = defineEmits<{
 }>()
 const router = useRouter()
 
+const bannerType = ref<'base' | 'operate'>('base')
+
+// region base-banner 部分
 const year = ref(new Date().getFullYear())
 const month = ref(new Date().getMonth() + 1)
 const doSwitch = (type: 'year+' | 'month+' | 'year-' | 'month-') => {
@@ -41,30 +44,49 @@ const doSwitch = (type: 'year+' | 'month+' | 'year-' | 'month-') => {
     emits('month-change', { year: year.value, month: month.value })
 }
 
+// endregion
+// region operate-banner 部分
 const jump = (name: string) => {
     router.push({ name })
 }
+// endregion
 </script>
 
 <template>
     <div class="banner">
-        <div class="year">
-            <div class="btn" @click="doSwitch('year-')">-</div>
-            <div class="num">{{ year }}</div>
-            <div class="btn" @click="doSwitch('year+')">+</div>
-        </div>
-        <div class="month">
-            <div class="btn" @click="doSwitch('month-')">-</div>
-            <div class="num">{{ month.toString().padStart(2, '0') }}</div>
-            <div class="btn" @click="doSwitch('month+')">+</div>
-        </div>
-        <div class="op-group">
-            operates
-        </div>
-        <!--        <button @click="jump('Specific')">Specific</button>-->
-        <!--        <button @click="jump('Overview')">Overview</button>-->
-        <!--        <button @click="jump('Create')">Create</button>-->
-        <!--        <button @click="jump('Setting')">Setting</button>-->
+        <transition name="collapse">
+            <div class="base-banner" v-if="bannerType === 'base'">
+                <div class="year">
+                    <div class="btn" @click="doSwitch('year-')">-</div>
+                    <div class="num">{{ year }}</div>
+                    <div class="btn" @click="doSwitch('year+')">+</div>
+                </div>
+                <div class="month">
+                    <div class="btn" @click="doSwitch('month-')">-</div>
+                    <div class="num">{{ month.toString().padStart(2, '0') }}</div>
+                    <div class="btn" @click="doSwitch('month+')">+</div>
+                </div>
+                <div class="to-operate" @click="bannerType = 'operate'">operates</div>
+            </div>
+            <div class="operate-banner" v-else>
+                <div class="operate-btn" @click="jump('Create')" title="新建代办">
+                    New
+                </div>
+                <!--                <div @click="jump('Specific')">Specific</div>-->
+                <div class="operate-btn" title="总览/查询"
+                     @click="jump('Overview')">
+                    Overview
+                </div>
+                <div class="operate-btn" title="设置"
+                     @click="jump('Setting')">
+                    Setting
+                </div>
+                <div class="operate-btn" title="返回"
+                     @click="bannerType = 'base'">
+                    Back
+                </div>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -74,43 +96,65 @@ const jump = (name: string) => {
     width: 100%;
     height: 100%;
     padding: 0 20px;
-    color: #eee;
+    color: #ccc;
     font-size: 16px;
     font-family: UniDream-LED;
     text-shadow: #000 1px 1px 1px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    user-select: none;
 
-    .year, .month {
+    .base-banner {
         position: relative;
-        width: 60px;
-        height: 24px;
-        user-select: none;
-        flex-shrink: 0;
+        width: 100%;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: space-between;
 
-        .num {
-            width: 40px;
-            text-align: center;
+        .year, .month {
+            position: relative;
+            width: 60px;
+            height: 24px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .num {
+                width: 40px;
+                text-align: center;
+            }
+
+            .btn {
+                width: 10px;
+                height: 100%;
+                text-align: center;
+                line-height: 24px;
+                cursor: pointer;
+            }
         }
 
-        .btn {
-            width: 10px;
-            height: 100%;
+        .to-operate {
+            position: relative;
+            width: 60px;
             text-align: center;
-            line-height: 24px;
             cursor: pointer;
+            flex-shrink: 0;
         }
     }
 
-    .op-group {
+    .operate-banner {
         position: relative;
-        width: 60px;
-        user-select: none;
-        flex-shrink: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .operate-btn {
+            position: relative;
+            width: fit-content;
+            cursor: pointer;
+        }
     }
 }
 </style>
