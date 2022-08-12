@@ -83,13 +83,16 @@ const generateCalendarOption = (year: number, month: number, list: CalendarTodoD
                 },
                 itemStyle: {
                     borderWidth: 0,
-                }
+                    color: 'transparent'
+                },
             }
         ],
+        backgroundColor: '',
         series: [
             {
                 type: 'custom',
                 coordinateSystem: 'calendar',
+                color: '#00000000',
                 renderItem: (params, api) => {
                     const celTimestamp = api.value(0)
                     const cellPoint = api.coord(celTimestamp) as [ number, number ]
