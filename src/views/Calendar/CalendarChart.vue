@@ -12,11 +12,11 @@ const chartRenderer = shallowRef<CalendarRenderer | null>(null)
 const doRender = (el: HTMLDivElement) => {
     const calendar = new CalendarRenderer(el)
     chartRenderer.value = calendar
-    calendar.render(2022, 8, [
-        {date: '2022-8-2', count: 3},
-        {date: '2022-8-12', count: 6},
-        {date: '2022-8-24', count: 10},
-        {date: '2022-8-5', count: 50},
+    calendar.render(2022, 7, [
+        {date: '2022-7-2', count: 3},
+        {date: '2022-7-12', count: 6},
+        {date: '2022-7-24', count: 10},
+        {date: '2022-7-5', count: 50},
     ])
     emits('chart-ready', calendar)
 }

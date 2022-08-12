@@ -6,7 +6,7 @@ import Vue3Clock from "vue3clock";
     <div class="home-view"
          data-tauri-drag-region>
         <div class="clock-container">
-            <Vue3Clock/>
+<!--            <Vue3Clock/>-->
         </div>
         <div class="overview-container">
             <router-view v-slot="{Component}">
