@@ -102,5 +102,12 @@ const jump = (name: string) => {
             cursor: pointer;
         }
     }
+
+    .op-group {
+        position: relative;
+        width: 60px;
+        user-select: none;
+        flex-shrink: 0;
+    }
 }
 </style>

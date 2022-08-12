@@ -37,6 +37,7 @@ const clockStyle: Partial<ClockConfig> = {
     height: 100%;
     border: solid 2px #eee;
     border-radius: 8px;
+    background: #0006;
     cursor: move;
     overflow: hidden;
     display: flex;
@@ -51,6 +52,7 @@ const clockStyle: Partial<ClockConfig> = {
         position: relative;
         width: 200px;
         height: 100%;
+        cursor: move;
         pointer-events: none;
         display: flex;
         align-items: center;
@@ -61,6 +63,7 @@ const clockStyle: Partial<ClockConfig> = {
         position: relative;
         width: calc(100% - 200px);
         height: 100%;
+        cursor: default;
         display: flex;
         align-items: center;
         justify-content: center;
