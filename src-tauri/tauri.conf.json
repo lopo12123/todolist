@@ -58,6 +58,7 @@
                 "label": "main",
                 "title": "TODO",
                 "decorations": false,
+                "alwaysOnTop": true,
                 "height": 200,
                 "width": 500,
                 "minHeight": 200,
