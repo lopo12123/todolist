@@ -1,5 +1,15 @@
 <script lang="ts" setup>
-import Vue3Clock from "vue3clock";
+import Vue3Clock, { ClockConfig } from "vue3clock";
+
+const clockStyle: Partial<ClockConfig> = {
+    dialStroke: '#fff',
+    numberStyle: 'fill',
+    numberText: 'Roma',
+    numberColor: '#fff',
+    hourStroke: '#91cc75',
+    minuteStroke: '#fac858',
+    secondStroke: '#ee6666',
+}
 </script>
 
 <template>
@@ -7,7 +17,7 @@ import Vue3Clock from "vue3clock";
          data-tauri-drag-region>
         <div class="clock-container"
              data-tauri-drag-region>
-            <Vue3Clock/>
+            <Vue3Clock :config="clockStyle"/>
         </div>
         <div class="overview-container"
              data-tauri-drag-region>
@@ -28,6 +38,7 @@ import Vue3Clock from "vue3clock";
     border: solid 2px #eee;
     border-radius: 8px;
     cursor: move;
+    overflow: hidden;
     display: flex;
     align-content: center;
     justify-content: space-between;

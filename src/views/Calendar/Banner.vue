@@ -71,7 +71,7 @@ const jump = (name: string) => {
     width: 100%;
     height: 100%;
     padding: 0 20px;
-    color: #ccc;
+    color: #eee;
     font-size: 16px;
     font-family: UniDream-LED;
     text-shadow: #000 1px 1px 1px;
