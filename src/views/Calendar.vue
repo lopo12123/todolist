@@ -11,7 +11,7 @@ import WithBanner from "../layouts/WithBanner.vue";
             <Banner/>
         </template>
         <template #body>
-            <CalenderChart/>
+<!--            <CalenderChart/>-->
         </template>
     </WithBanner>
 </template>
