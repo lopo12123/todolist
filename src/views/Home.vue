@@ -1,14 +1,18 @@
 <script lang="ts" setup>
-import Vue3Clock, { ClockConfig } from "vue3clock";
+import { shallowRef } from "vue";
+import { useGlobal } from "@/scripts/useGlobal";
+import Vue3Clock, { UseClock } from "vue3clock";
 
-const clockStyle: Partial<ClockConfig> = {
-    dialStroke: '#fff',
-    numberStyle: 'fill',
-    numberText: 'Roma',
-    numberColor: '#fff',
-    hourStroke: '#91cc75',
-    minuteStroke: '#fac858',
-    secondStroke: '#ee6666',
+const globalStore = useGlobal()
+
+const clock = shallowRef<UseClock | null>(null)
+const bindClock = (instance: UseClock) => {
+    clock.value = instance
+}
+
+// 重绘时钟
+const rerenderClock = () => {
+    clock.value?.rerender(globalStore.clockStyle)
 }
 </script>
 
@@ -17,7 +21,12 @@ const clockStyle: Partial<ClockConfig> = {
          data-tauri-drag-region>
         <div class="clock-container"
              data-tauri-drag-region>
-            <Vue3Clock :config="clockStyle"/>
+            <Vue3Clock
+                :config="{
+                    ...globalStore.clockStyle,
+                    numberStyle: 'fill'
+                }"
+                @clock-ready="bindClock"/>
         </div>
         <div class="overview-container"
              data-tauri-drag-region>

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
 import { ref } from "vue";
+import { closeWindow } from "@/scripts/useTauri";
 
 export type YM = { year: number, month: number }
 
@@ -43,11 +44,15 @@ const doSwitch = (type: 'year+' | 'month+' | 'year-' | 'month-') => {
     }
     emits('month-change', { year: year.value, month: month.value })
 }
-
 // endregion
+
 // region operate-banner 部分
 const jump = (name: string) => {
     router.push({ name })
+}
+
+const exitApp = () => {
+    closeWindow(router)
 }
 // endregion
 </script>
@@ -72,7 +77,6 @@ const jump = (name: string) => {
                 <div class="operate-btn" @click="jump('Create')" title="新建代办">
                     New
                 </div>
-                <!--                <div @click="jump('Specific')">Specific</div>-->
                 <div class="operate-btn" title="总览/查询"
                      @click="jump('Overview')">
                     Overview
@@ -84,6 +88,10 @@ const jump = (name: string) => {
                 <div class="operate-btn" title="返回"
                      @click="bannerType = 'base'">
                     Back
+                </div>
+                <div class="operate-btn" title="退出"
+                     @click="exitApp">
+                    Exit
                 </div>
             </div>
         </transition>

@@ -363,9 +363,13 @@ class TODOList {
      */
     getMonthSummary(year: number, month: number): MonthSummary {
         return [
+            // @ts-ignore
             { date: `${year}-${month}-2`, records: [{}, {}] },
+            // @ts-ignore
             { date: `${year}-${month}-12`, records: [{}] },
+            // @ts-ignore
             { date: `${year}-${month}-22`, records: [{}, {}, {}, {}, {}, {}] },
+            // @ts-ignore
             { date: `${year}-${month}-27`, records: [{}, {}, {}, {}] }
         ]
     }
