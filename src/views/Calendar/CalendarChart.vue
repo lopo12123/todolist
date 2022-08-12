@@ -1,24 +1,28 @@
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted, ref, shallowRef } from "vue";
-import { CalendarRenderer } from "@/scripts/useCalendar";
+import { CalendarRenderer, CalendarTodoData } from "@/scripts/useCalendar";
+import { useTodoList } from "@/scripts/useTodo";
 
 const emits = defineEmits<{
-    (ev: 'chart-ready', renderer: CalendarRenderer): void
+    (ev: 'calendar-ready', renderer: CalendarRenderer): void
 }>()
 
 const chartDOM = ref<HTMLDivElement | null>(null)
 const chartRenderer = shallowRef<CalendarRenderer | null>(null)
 
 const doRender = (el: HTMLDivElement) => {
+    const year = new Date().getFullYear()
+    const month = new Date().getMonth() + 1
+
+    const recordList: CalendarTodoData[] = useTodoList()
+        .getMonthSummary(year, month)
+        .map(day => ({ date: day.date, count: day.records.length }))
+
     const calendar = new CalendarRenderer(el)
     chartRenderer.value = calendar
-    calendar.render(2022, 7, [
-        {date: '2022-7-2', count: 3},
-        {date: '2022-7-12', count: 6},
-        {date: '2022-7-24', count: 10},
-        {date: '2022-7-5', count: 50},
-    ])
-    emits('chart-ready', calendar)
+    calendar.render(year, month, recordList)
+
+    emits('calendar-ready', calendar)
 }
 
 onMounted(() => {

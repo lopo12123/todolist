@@ -293,9 +293,9 @@ const enum DBStatic {
 }
 
 /**
- * @description 数据库记录结构
+ * @description 数据库单条记录结构
  */
-type TodoRecord = {
+type SingleRecord = {
     /**
      * @description deadline of the item (in timestamp) - pk
      */
@@ -318,14 +318,22 @@ type TodoRecord = {
     docId: string | null
 }
 /**
- * @description 统计总览结构
+ * @description 日统计结果
  */
-type OverviewResult = {
-    total: number
-    done: number
-    undo: number
-    late: number
+type DaySummary = {
+    /**
+     * @description yyyy-MM-dd
+     */
+    date: string
+    /**
+     * @description records
+     */
+    records: SingleRecord[]
 }
+/**
+ * @description 月统计结果
+ */
+type MonthSummary = DaySummary[]
 
 class TODOList {
     #dbc: UseDB
@@ -349,11 +357,17 @@ class TODOList {
 
     // region 统计总览
     /**
-     * @description 统计总览
-     * @param range 未来一周 / 未来一月 / 过去一周 / 过去一月 / 全部
+     * @description 获取某月的统计结果 (首页日历展示)
+     * @param year
+     * @param month
      */
-    overview(range: 'next-week' | 'next-month' | 'last-week' | 'last-month' | 'all') {
-        const todayStart = new Date(new Date().toDateString()).getTime()
+    getMonthSummary(year: number, month: number): MonthSummary {
+        return [
+            { date: `${year}-${month}-2`, records: [{}, {}] },
+            { date: `${year}-${month}-12`, records: [{}] },
+            { date: `${year}-${month}-22`, records: [{}, {}, {}, {}, {}, {}] },
+            { date: `${year}-${month}-27`, records: [{}, {}, {}, {}] }
+        ]
     }
 
     // endregion

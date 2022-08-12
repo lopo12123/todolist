@@ -5,15 +5,15 @@ import { ECElementEvent } from "echarts/types/src/util/types";
 const iconPath = 'M533.504 268.288q33.792-41.984 71.68-75.776 32.768-27.648 74.24-50.176t86.528-19.456q63.488 5.12 105.984 30.208t67.584 63.488 34.304 87.04 6.144 99.84-17.92 97.792-36.864 87.04-48.64 74.752-53.248 61.952q-40.96 41.984-85.504 78.336t-84.992 62.464-73.728 41.472-51.712 15.36q-20.48 1.024-52.224-14.336t-69.632-41.472-79.872-61.952-82.944-75.776q-26.624-25.6-57.344-59.392t-57.856-74.24-46.592-87.552-21.504-100.352 11.264-99.84 39.936-83.456 65.536-61.952 88.064-35.328q24.576-5.12 49.152-1.536t48.128 12.288 45.056 22.016 40.96 27.648q45.056 33.792 86.016 80.896z'
 // 图标颜色
 const iconColor = (count: number) => {
-    // 1 2
-    if(count <= 2) return '#93CE07'
-    // 3 4 5
-    else if(count <= 5) return '#FBDB0F'
+    // 1
+    if(count <= 1) return '#93CE07'
+    // 2 3
+    else if(count <= 3) return '#FBDB0F'
+    // 4 5
+    else if(count <= 5) return '#FC7D02'
     // 6 7
-    else if(count <= 7) return '#FC7D02'
-    // 8 9 10
-    else if(count <= 10) return '#FD0100'
-    // >= 10
+    else if(count <= 7) return '#FD0100'
+    // >= 8
     else return '#AA069F'
 }
 
@@ -34,7 +34,7 @@ const generateCalendarOption = (year: number, month: number, list: CalendarTodoD
     const _config: EChartsOption = {
         tooltip: {
             confine: true,
-            position: point => [point[0], point[1] - 30],
+            position: point => [ point[0], point[1] - 30 ],
             formatter: (param) => {
                 // @ts-ignore
                 return param.data[1].count === 0 ? '' : `${ param.data[1].count } 项代办`
@@ -61,7 +61,7 @@ const generateCalendarOption = (year: number, month: number, list: CalendarTodoD
                 cellSize: 'auto',
                 range: `${ year }-${ month }`,
                 dayLabel: {
-                    nameMap: ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'],
+                    nameMap: [ 'Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat' ],
                     firstDay: 1,
                     color: '#eee',
                     fontSize: 14,
@@ -171,28 +171,11 @@ export class CalendarRenderer {
     }
 
     /**
-     * @description ev.value: [string, {data: string, count: number}]
-     * @private
-     */
-    #clickCallback = ((e: ECElementEvent) => {
-        console.log(e, e.value)
-    }).bind(this) as (e: any) => void
-
-    listen() {
-        this.#instance.on('click', this.#clickCallback)
-    }
-
-    unListen() {
-        this.#instance.off('click', this.#clickCallback)
-    }
-
-    /**
      * @description 绘制
      */
     render(year: number, month: number, list: CalendarTodoData[] = []) {
-        this.unListen()
-        this.#instance.setOption(generateCalendarOption(year, month, list), true)
-        this.listen()
+        this.#instance.clear()
+        this.#instance.setOption(generateCalendarOption(year, month, list))
     }
 
     /**

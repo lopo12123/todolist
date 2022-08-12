@@ -2,8 +2,10 @@
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 
+export type YM = { year: number, month: number }
+
 const emits = defineEmits<{
-    // ()
+    (ev: 'month-change', ym: YM): void
 }>()
 const router = useRouter()
 
@@ -36,6 +38,7 @@ const doSwitch = (type: 'year+' | 'month+' | 'year-' | 'month-') => {
             }
             break
     }
+    emits('month-change', { year: year.value, month: month.value })
 }
 
 const jump = (name: string) => {
