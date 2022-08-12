@@ -45,13 +45,6 @@ import Vue3Clock from "vue3clock";
         display: flex;
         align-items: center;
         justify-content: center;
-
-        &::before {
-            content: "";
-            width: 1px;
-            height: 80%;
-            background-color: #ccc;
-        }
     }
 }
 </style>
