@@ -25,6 +25,14 @@ img {
     -webkit-user-drag: none;
 }
 
+.banner-btn {
+    position: relative;
+    width: fit-content;
+    height: 24px;
+    line-height: 24px;
+    cursor: pointer;
+}
+
 .with-hover {
     position: relative;
 

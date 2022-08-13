@@ -10,11 +10,11 @@ const back = () => {
 
 <template>
     <div class="banner">
-        <div class="reset" title="恢复默认设置">Reset</div>
-        <div class="confirm with-hover" title="确认修改">
+        <div class="banner-btn with-hover" title="恢复默认设置">Reset</div>
+        <div class="banner-btn with-hover" title="确认修改">
             Confirm
         </div>
-        <div class="back" title="返回首页"
+        <div class="banner-btn with-hover" title="返回首页"
              @click="back">
             Back
         </div>
@@ -35,13 +35,5 @@ const back = () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    .reset, .confirm, .back {
-        position: relative;
-        width: fit-content;
-        height: 24px;
-        line-height: 24px;
-        cursor: pointer;
-    }
 }
 </style>

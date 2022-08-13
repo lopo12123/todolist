@@ -76,22 +76,22 @@ const exitApp = () => {
                 </div>
             </div>
             <div class="operate-banner" v-else>
-                <div class="operate-btn with-hover" @click="jump('Create')" title="新建代办">
+                <div class="banner-btn with-hover" @click="jump('Create')" title="新建代办">
                     New
                 </div>
-                <div class="operate-btn with-hover" title="总览/查询"
+                <div class="banner-btn with-hover" title="总览/查询"
                      @click="jump('Overview')">
                     Overview
                 </div>
-                <div class="operate-btn with-hover" title="设置"
+                <div class="banner-btn with-hover" title="设置"
                      @click="jump('Setting')">
                     Setting
                 </div>
-                <div class="operate-btn with-hover" title="返回"
+                <div class="banner-btn with-hover" title="返回"
                      @click="bannerType = 'base'">
                     Back
                 </div>
-                <div class="operate-btn with-hover" title="退出"
+                <div class="banner-btn with-hover" title="退出"
                      @click="exitApp">
                     Exit
                 </div>
@@ -160,14 +160,6 @@ const exitApp = () => {
         display: flex;
         align-items: center;
         justify-content: space-between;
-
-        .operate-btn {
-            position: relative;
-            width: fit-content;
-            height: 24px;
-            line-height: 24px;
-            cursor: pointer;
-        }
     }
 }
 </style>
