@@ -92,7 +92,7 @@ const exitApp = () => {
                     Back
                 </div>
                 <div class="banner-btn with-hover" title="退出"
-                     @click="exitApp">
+                     style="color: #f56c6c" @click="exitApp">
                     Exit
                 </div>
             </div>
