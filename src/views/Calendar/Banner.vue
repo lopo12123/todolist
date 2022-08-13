@@ -62,34 +62,36 @@ const exitApp = () => {
         <transition name="collapse">
             <div class="base-banner" v-if="bannerType === 'base'">
                 <div class="year">
-                    <div class="btn" @click="doSwitch('year-')">-</div>
+                    <div class="btn with-hover" @click="doSwitch('year-')">-</div>
                     <div class="num">{{ year }}</div>
-                    <div class="btn" @click="doSwitch('year+')">+</div>
+                    <div class="btn with-hover" @click="doSwitch('year+')">+</div>
                 </div>
                 <div class="month">
-                    <div class="btn" @click="doSwitch('month-')">-</div>
+                    <div class="btn with-hover" @click="doSwitch('month-')">-</div>
                     <div class="num">{{ month.toString().padStart(2, '0') }}</div>
-                    <div class="btn" @click="doSwitch('month+')">+</div>
+                    <div class="btn with-hover" @click="doSwitch('month+')">+</div>
                 </div>
-                <div class="to-operate" @click="bannerType = 'operate'">operates</div>
+                <div class="menu with-hover" title="菜单"
+                     @click="bannerType = 'operate'">Menu
+                </div>
             </div>
             <div class="operate-banner" v-else>
-                <div class="operate-btn" @click="jump('Create')" title="新建代办">
+                <div class="operate-btn with-hover" @click="jump('Create')" title="新建代办">
                     New
                 </div>
-                <div class="operate-btn" title="总览/查询"
+                <div class="operate-btn with-hover" title="总览/查询"
                      @click="jump('Overview')">
                     Overview
                 </div>
-                <div class="operate-btn" title="设置"
+                <div class="operate-btn with-hover" title="设置"
                      @click="jump('Setting')">
                     Setting
                 </div>
-                <div class="operate-btn" title="返回"
+                <div class="operate-btn with-hover" title="返回"
                      @click="bannerType = 'base'">
                     Back
                 </div>
-                <div class="operate-btn" title="退出"
+                <div class="operate-btn with-hover" title="退出"
                      @click="exitApp">
                     Exit
                 </div>
@@ -141,9 +143,10 @@ const exitApp = () => {
             }
         }
 
-        .to-operate {
+        .menu {
             position: relative;
-            width: 60px;
+            height: 24px;
+            line-height: 24px;
             text-align: center;
             cursor: pointer;
             flex-shrink: 0;
@@ -161,6 +164,8 @@ const exitApp = () => {
         .operate-btn {
             position: relative;
             width: fit-content;
+            height: 24px;
+            line-height: 24px;
             cursor: pointer;
         }
     }

@@ -1,25 +1,21 @@
 <script lang="ts" setup>
-import { useRouter } from "vue-router";
+import WithBanner from "@/layouts/WithBanner.vue";
+import Banner from "./Setting/Banner.vue";
+import SettingView from "./Setting/SettingView.vue";
 
-const router = useRouter()
-
-const back = () => {
-    router.push({ name: 'Calendar' })
-}
 </script>
 
 <template>
-    <div class="temp-class">
-        <button @click="back">返回</button>
-        设置
-    </div>
+    <WithBanner>
+        <template #banner>
+            <Banner/>
+        </template>
+        <template #body>
+            <SettingView/>
+        </template>
+    </WithBanner>
 </template>
 
 <style lang="scss" scoped>
-.temp-class {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-color: beige;
-}
+
 </style>
