@@ -83,9 +83,9 @@ const exitApp = () => {
                      @click="jump('Overview')">
                     Overview
                 </div>
-                <div class="banner-btn with-hover" title="设置"
+                <div class="banner-btn with-hover" title="时钟样式设置"
                      @click="jump('Setting')">
-                    Setting
+                    style
                 </div>
                 <div class="banner-btn with-hover" title="返回"
                      @click="bannerType = 'base'">

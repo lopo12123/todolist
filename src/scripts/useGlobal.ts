@@ -4,7 +4,7 @@ import { shallowMerge } from "@/scripts/util";
 
 // 时钟默认样式
 export const defaultClockStyle: Partial<ClockConfig> = {
-    dialStroke: '#ffffff',
+    dialStroke: '#fffccf',
     numberText: 'Roma',
     numberColor: '#ffffff',
     hourStroke: '#91cc75',
@@ -17,14 +17,7 @@ export const useGlobal = defineStore({
     state() {
         return {
             // 时钟样式
-            clockStyle: {
-                dialStroke: '#ffffff',
-                numberText: 'Roma' as 'Arab' | 'Roma',
-                numberColor: '#ffffff',
-                hourStroke: '#91cc75',
-                minuteStroke: '#fac858',
-                secondStroke: '#ee6666',
-            } as Partial<ClockConfig>,
+            clockStyle: defaultClockStyle as Partial<ClockConfig>,
         }
     },
     actions: {
