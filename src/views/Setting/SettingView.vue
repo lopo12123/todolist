@@ -102,7 +102,6 @@ const props = defineProps({
     height: 100%;
     padding: 10px 20px;
     color: #eee;
-    font-weight: 300;
     font-family: PixelFont;
     text-shadow: #000 2px 1px 1px;
     display: grid;

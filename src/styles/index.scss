@@ -58,3 +58,9 @@ img {
         opacity: 1;
     }
 }
+
+.text-inline {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

@@ -293,34 +293,30 @@ const enum DBStatic {
 }
 
 /**
- * @description 数据库单条记录结构
+ * @description 待办事项存储结构
  */
-type SingleRecord = {
+export type TodoRecord = {
     /**
-     * @description deadline of the item (in timestamp) - pk
+     * @description deadline of the item (in timestamp) - as pk in IDB
      */
     due: number
     /**
-     * @description time of when the item was set (in timestamp)
+     * @description time of when the item was create (in timestamp)
      */
-    birth: number
+    create: number
     /**
-     * @description if finished
+     * @description title of the item (in 20 chars)
      */
-    finish: boolean
+    title: string
     /**
-     * @description brief description
+     * @description brief description (in 500 chars)
      */
     desc: string
-    /**
-     * @description document of this to-do-item
-     */
-    docId: string | null
 }
 /**
  * @description 日统计结果
  */
-type DaySummary = {
+export type DaySummary = {
     /**
      * @description yyyy-MM-dd
      */
@@ -328,12 +324,12 @@ type DaySummary = {
     /**
      * @description records
      */
-    records: SingleRecord[]
+    records: TodoRecord[]
 }
 /**
  * @description 月统计结果
  */
-type MonthSummary = DaySummary[]
+export type MonthSummary = DaySummary[]
 
 class TODOList {
     #dbc: UseDB
@@ -345,6 +341,7 @@ class TODOList {
     // region 初始化
     /**
      * @description 连接(不存在则创建)数据库
+     * @description 此步骤在模块加载时使用顶层 await 自动执行
      */
     setup() {
         return this.#dbc
@@ -364,21 +361,28 @@ class TODOList {
     getMonthSummary(year: number, month: number): MonthSummary {
         return [
             // @ts-ignore
-            { date: `${year}-${month}-2`, records: [{}, {}] },
+            { date: `${ year }-${ month }-2`, records: [ {}, {} ] },
             // @ts-ignore
-            { date: `${year}-${month}-12`, records: [{}] },
+            { date: `${ year }-${ month }-12`, records: [ {} ] },
             // @ts-ignore
-            { date: `${year}-${month}-22`, records: [{}, {}, {}, {}, {}, {}] },
+            { date: `${ year }-${ month }-22`, records: [ {}, {}, {}, {}, {}, {} ] },
             // @ts-ignore
-            { date: `${year}-${month}-27`, records: [{}, {}, {}, {}] }
+            { date: `${ year }-${ month }-27`, records: [ {}, {}, {}, {} ] }
         ]
     }
 
     // endregion
+
+    /**
+     * @description 退出前关闭数据库连接
+     */
+    close() {
+        this.#dbc.close()
+    }
 }
 
 // 使用单例
-const todoList = new TODOList()
-// 顶层 await
-await todoList.setup()
-export const useTodoList = () => todoList
+const _todoList = new TODOList()
+// 顶层 await 进行初始化
+await _todoList.setup()
+export const useTodoList = () => _todoList

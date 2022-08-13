@@ -18,7 +18,7 @@ const back = () => {
     <div class="banner">
         <div class="banner-btn with-hover" title="新建当前代办"
              @click="emits('btn-ev','create')">
-            Confirm
+            Create
         </div>
         <div class="banner-btn with-hover" title="清空已填写内容"
              @click="emits('btn-ev','clear')">
