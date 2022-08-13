@@ -5,6 +5,14 @@ import Vue3Clock, { ClockConfig, UseClock } from "vue3clock";
 
 const globalStore = useGlobal()
 
+try {
+    const clockStyleIfExist = localStorage.getItem('clock-style')
+    if(clockStyleIfExist) globalStore.mergeClockStyle(JSON.parse(clockStyleIfExist))
+}
+catch (e) {
+    console.log(e)
+}
+
 const clock = shallowRef<UseClock | null>(null)
 const bindClock = (instance: UseClock) => {
     clock.value = instance

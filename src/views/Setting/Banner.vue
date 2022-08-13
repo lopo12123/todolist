@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
 
-export type SettingEmitType = 'use-default' | 'do-rollback' | 'do-apply' | 'back'
+export type SettingEmitType = 'do-default' | 'do-rollback' | 'do-apply' | 'back'
 const emits = defineEmits<{
     (ev: 'btn-ev', type: SettingEmitType): void
     (ev: 'direct-back'): void
@@ -17,8 +17,8 @@ const back = () => {
 <template>
     <div class="banner">
         <div class="banner-btn with-hover" title="使用默认设置"
-             @click="emits('btn-ev', 'use-default')">
-            Use-Default
+             @click="emits('btn-ev', 'do-default')">
+            Default
         </div>
         <div class="banner-btn with-hover" title="重置当前修改项"
              @click="emits('btn-ev','do-rollback')">
