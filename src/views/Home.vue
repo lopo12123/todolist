@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { shallowRef } from "vue";
 import { useGlobal } from "@/scripts/useGlobal";
-import Vue3Clock, { UseClock } from "vue3clock";
+import Vue3Clock, { ClockConfig, UseClock } from "vue3clock";
 
 const globalStore = useGlobal()
 
@@ -11,8 +11,8 @@ const bindClock = (instance: UseClock) => {
 }
 
 // 重绘时钟
-const rerenderClock = () => {
-    clock.value?.rerender(globalStore.clockStyle)
+const rerenderClock = (renderOption: Partial<ClockConfig>) => {
+    clock.value?.rerender(renderOption)
 }
 </script>
 
@@ -32,7 +32,7 @@ const rerenderClock = () => {
              data-tauri-drag-region>
             <router-view v-slot="{Component}">
                 <transition name="slide" mode="out-in">
-                    <component :is="Component"/>
+                    <component :is="Component" @rerender-clock="rerenderClock"/>
                 </transition>
             </router-view>
         </div>
