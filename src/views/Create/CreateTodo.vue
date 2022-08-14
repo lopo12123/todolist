@@ -27,6 +27,10 @@ const formatDate = (t: number) => {
         + `:${ (_date.getSeconds() + '').padStart(2, '0') }`
 }
 
+const tt = (e: any) => {
+    console.log(e, e.target.value, e.target.valueAsNumber)
+}
+
 onMounted(() => {
     emits('editor-ready', {
         doClean: () => {
@@ -43,19 +47,28 @@ onMounted(() => {
     <div class="create-todo">
         <div class="single-line text-inline">
             <div class="label">创建时间</div>
-            <div style="opacity: 0.5">{{ formatDate(newTodo.create) }}</div>
+            <div class="selector" style="opacity: 0.5">
+                {{ formatDate(newTodo.create) }}
+            </div>
         </div>
         <div class="single-line text-inline">
             <div class="label">待办时间</div>
-            <div>{{ formatDate(newTodo.due) }}</div>
+            <label class="selector">
+                <span>{{ formatDate(newTodo.due) }}</span> <br>
+                <input type="datetime-local">
+            </label>
         </div>
         <div class="single-line text-inline">
             <div class="label">待办事项</div>
-            <div>{{ newTodo.title }}</div>
+            <input class="selector-ipt" type="text"
+                   v-model="newTodo.title" maxlength="20"
+                   placeholder="字数限制: 20">
         </div>
-        <div class="multiple-line text-inline">
+        <div class="single-line text-inline">
             <div class="label">备注(选)</div>
-            <div>{{ newTodo.desc }}</div>
+            <input class="selector-ipt" type="text"
+                   v-model="newTodo.desc" maxlength="200"
+                   placeholder="字数限制: 200">
         </div>
     </div>
 </template>
@@ -75,8 +88,31 @@ onMounted(() => {
     justify-content: space-between;
 
     .label {
+        position: relative;
         width: 80px;
+        height: 24px;
         line-height: 24px;
+    }
+
+    .selector {
+        position: relative;
+        width: calc(100% - 80px);
+        height: 24px;
+        line-height: 24px;
+    }
+
+    .selector-ipt {
+        position: relative;
+        width: calc(100% - 80px);
+        height: 24px;
+        line-height: 24px;
+        border: none;
+        border-bottom: solid 1px #eee;
+        background-color: transparent;
+        outline: none;
+        color: #eee;
+        font-family: PixelFont;
+        text-shadow: #000 2px 1px 1px;
     }
 
     .single-line {
@@ -85,15 +121,6 @@ onMounted(() => {
         height: 24px;
         display: flex;
         align-items: center;
-        justify-content: flex-start;
-    }
-
-    .multiple-line {
-        position: relative;
-        width: 100%;
-        height: 48px;
-        display: flex;
-        align-items: flex-start;
         justify-content: flex-start;
     }
 }
