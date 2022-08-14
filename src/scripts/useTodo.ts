@@ -352,6 +352,13 @@ class TODOList {
 
     // endregion
 
+    // region
+    addTodoRecord(todo: TodoRecord) {
+        console.log('新增: ', todo)
+    }
+
+    // endregion
+
     // region 统计总览
     /**
      * @description 获取某月的统计结果 (首页日历展示)

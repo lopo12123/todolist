@@ -1,11 +1,33 @@
 <script lang="ts" setup>
 import WithBanner from "@/layouts/WithBanner.vue";
 import Banner from "./Create/Banner.vue";
-import CreateTodo from "@/views/Create/CreateTodo.vue";
+import CreateTodo, { EditorController } from "@/views/Create/CreateTodo.vue";
 import { CreateEmitType } from "@/views/Create/Banner.vue";
+import { shallowRef } from "vue";
+import { useTodoList } from "@/scripts/useTodo";
+import { useRouter } from "vue-router";
+
+const router = useRouter()
 
 const solveBtnEv = (type: CreateEmitType) => {
-    console.log(type)
+    if(type === 'clear') editorCtr.value?.doClear()
+    else if(type === 'create') {
+        const _todo = editorCtr.value?.doGet()
+        if(_todo) {
+            if(_todo.title.trim() === '') {
+                editorCtr.value?.doWarning()
+            }
+            else {
+                useTodoList().addTodoRecord(_todo)
+                router.push({ name: 'Calendar' })
+            }
+        }
+    }
+}
+
+const editorCtr = shallowRef<EditorController | null>(null)
+const bindController = (_controller: EditorController) => {
+    editorCtr.value = _controller
 }
 </script>
 
@@ -15,7 +37,7 @@ const solveBtnEv = (type: CreateEmitType) => {
             <Banner @btn-ev="solveBtnEv"/>
         </template>
         <template #body>
-            <CreateTodo/>
+            <CreateTodo @editor-ready="bindController"/>
         </template>
     </WithBanner>
 </template>
