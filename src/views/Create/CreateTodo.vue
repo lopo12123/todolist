@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { TodoRecord } from "@/scripts/useTodo";
 
 const emits = defineEmits<{
@@ -17,6 +17,7 @@ const initTemplate = {
 }
 const newTodo = ref<TodoRecord>(initTemplate)
 
+// 格式化时间显示
 const formatDate = (t: number) => {
     const _date = new Date(t)
     return `${ _date.getFullYear() }年`
@@ -27,9 +28,35 @@ const formatDate = (t: number) => {
         + `:${ (_date.getSeconds() + '').padStart(2, '0') }`
 }
 
-const tt = (e: any) => {
-    console.log(e, e.target.value, e.target.valueAsNumber)
+// region 日期选择器
+const formatDatePicker = (t: number) => {
+    const _date = new Date(t)
+    return `${ _date.getFullYear() }-`
+        + `${ (_date.getMonth() + 1 + '').padStart(2, '0') }-`
+        + `${ (_date.getDate() + '').padStart(2, '0') }T`
+        + `${ (_date.getHours() + '').padStart(2, '0') }:`
+        + `${ (_date.getMinutes() + '').padStart(2, '0') }`
 }
+const datePickerValue = computed(() => {
+    return formatDatePicker(newTodo.value.due)
+})
+const datePicker = ref<HTMLInputElement | null>(null)
+const invokePicker = () => {
+    // @ts-ignore
+    datePicker.value?.showPicker()
+}
+const pickDate = (e: Event) => {
+    const yyyyMMdd_T_hhmm = datePicker.value?.value
+    if(!yyyyMMdd_T_hhmm || yyyyMMdd_T_hhmm === '') {
+        newTodo.value.due = Date.now()
+        console.log('清空了')
+    }
+    else {
+        newTodo.value.due = new Date(yyyyMMdd_T_hhmm).getTime()
+        console.log('选择了')
+    }
+}
+// endregion
 
 onMounted(() => {
     emits('editor-ready', {
@@ -47,15 +74,20 @@ onMounted(() => {
     <div class="create-todo">
         <div class="single-line text-inline">
             <div class="label">创建时间</div>
-            <div class="selector" style="opacity: 0.5">
+            <div class="selector-date" style="opacity: 0.5">
                 {{ formatDate(newTodo.create) }}
             </div>
         </div>
         <div class="single-line text-inline">
             <div class="label">待办时间</div>
-            <label class="selector">
-                <span>{{ formatDate(newTodo.due) }}</span> <br>
-                <input type="datetime-local">
+            <label class="selector-date" @click="invokePicker">
+                <div>{{ formatDate(newTodo.due) }}</div>
+                <input class="input-date"
+                       :min="formatDatePicker(Date.now())"
+                       :value="datePickerValue"
+                       type="datetime-local"
+                       ref="datePicker"
+                       @change="pickDate">
             </label>
         </div>
         <div class="single-line text-inline">
@@ -94,11 +126,22 @@ onMounted(() => {
         line-height: 24px;
     }
 
-    .selector {
+    .selector-date {
         position: relative;
         width: calc(100% - 80px);
         height: 24px;
         line-height: 24px;
+
+        .input-date {
+            position: absolute;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            opacity: 0;
+        }
     }
 
     .selector-ipt {
@@ -111,6 +154,7 @@ onMounted(() => {
         background-color: transparent;
         outline: none;
         color: #eee;
+        letter-spacing: 1px;
         font-family: PixelFont;
         text-shadow: #000 2px 1px 1px;
     }
