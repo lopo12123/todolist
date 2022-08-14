@@ -2,11 +2,13 @@
 import { computed, onMounted, ref } from "vue";
 import { TodoRecord } from "@/scripts/useTodo";
 
+export type EditorController = {
+    doClear: () => void,
+    doGet: () => TodoRecord
+}
+
 const emits = defineEmits<{
-    (ev: 'editor-ready', controller: {
-        doClean: () => void,
-        doGet: () => TodoRecord
-    }): void
+    (ev: 'editor-ready', controller: EditorController): void
 }>()
 
 const initTemplate = {
@@ -15,8 +17,7 @@ const initTemplate = {
     title: '',
     desc: ''
 }
-const newTodo = ref<TodoRecord>(initTemplate)
-
+const newTodo = ref<TodoRecord>({ ...initTemplate })
 // 格式化时间显示
 const formatDate = (t: number) => {
     const _date = new Date(t)
@@ -25,7 +26,7 @@ const formatDate = (t: number) => {
         + `${ (_date.getDate() + '').padStart(2, '0') }日`
         + ` ${ (_date.getHours() + '').padStart(2, '0') }`
         + `:${ (_date.getMinutes() + '').padStart(2, '0') }`
-        + `:${ (_date.getSeconds() + '').padStart(2, '0') }`
+        // + `:${ (_date.getSeconds() + '').padStart(2, '0') }`
 }
 
 // region 日期选择器
@@ -60,8 +61,8 @@ const pickDate = (e: Event) => {
 
 onMounted(() => {
     emits('editor-ready', {
-        doClean: () => {
-            newTodo.value = initTemplate
+        doClear: () => {
+            newTodo.value = { ...initTemplate }
         },
         doGet: () => {
             return newTodo.value
