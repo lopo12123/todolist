@@ -38,7 +38,20 @@ const routes: RouteRecordRaw[] = [
             {
                 path: 'overview',
                 name: 'Overview',
-                component: () => import("@/views/Overview.vue")
+                component: () => import("@/views/Overview.vue"),
+                redirect: { name: 'OverviewSummary' },
+                children: [
+                    {
+                        path: 'summary',
+                        name: 'OverviewSummary',
+                        component: () => import("@/views/Overview/OverviewSummary.vue")
+                    },
+                    {
+                        path: 'detail',
+                        name: 'OverviewDetail',
+                        component: () => import("@/views/Overview/OverviewDetail.vue")
+                    }
+                ]
             },
         ]
     },

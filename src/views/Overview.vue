@@ -1,25 +1,22 @@
 <script lang="ts" setup>
-import { useRouter } from "vue-router";
-
-const router = useRouter()
-
-const back = () => {
-    router.push({ name: 'Calendar' })
-}
+import WithBanner from "@/layouts/WithBanner.vue";
+import Banner from "./Overview/Banner.vue";
 </script>
 
 <template>
-    <div class="overview-view">
-        <button @click="back">返回</button>
-        <span>总览</span>
-    </div>
+    <WithBanner>
+        <template #banner>
+            <Banner/>
+        </template>
+        <template #body>
+            <router-view v-slot="{Component}">
+                <transition name="scale" mode="out-in">
+                    <component :is="Component"/>
+                </transition>
+            </router-view>
+        </template>
+    </WithBanner>
 </template>
 
 <style lang="scss" scoped>
-.overview-view {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-color: aliceblue;
-}
 </style>
