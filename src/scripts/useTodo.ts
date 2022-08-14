@@ -354,7 +354,7 @@ class TODOList {
 
     // region
     addTodoRecord(todo: TodoRecord) {
-        console.log('新增: ', todo)
+        return this.#dbc.insert(DBStatic.storeName, { ...todo })
     }
 
     // endregion

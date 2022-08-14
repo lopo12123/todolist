@@ -6,6 +6,7 @@ import { CreateEmitType } from "@/views/Create/Banner.vue";
 import { shallowRef } from "vue";
 import { useTodoList } from "@/scripts/useTodo";
 import { useRouter } from "vue-router";
+import { doNotification } from "@/scripts/useTauri";
 
 const router = useRouter()
 
@@ -18,8 +19,14 @@ const solveBtnEv = (type: CreateEmitType) => {
                 editorCtr.value?.doWarning()
             }
             else {
-                useTodoList().addTodoRecord(_todo)
-                router.push({ name: 'Calendar' })
+                useTodoList()
+                    .addTodoRecord(_todo)
+                    .then(_ => {
+                        router.push({ name: 'Calendar' })
+                    })
+                    .catch(err => {
+                        doNotification('新建出错', err.toString())
+                    })
             }
         }
     }

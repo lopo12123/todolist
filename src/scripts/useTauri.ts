@@ -1,5 +1,12 @@
 import { appWindow } from "@tauri-apps/api/window";
 import type { Router } from "vue-router";
+import { sendNotification } from "@tauri-apps/api/notification";
+
+// region 系统提示
+const doNotification = (title: string, body: string) => {
+    sendNotification({ title, body })
+}
+// endregion
 
 // region 关闭窗口
 const closeWindow = (router: Router) => {
@@ -15,5 +22,6 @@ const closeWindow = (router: Router) => {
 // endregion
 
 export {
+    doNotification,
     closeWindow,
 }
