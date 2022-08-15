@@ -29,12 +29,12 @@ const rerenderClock = (renderOption: Partial<ClockConfig>) => {
          data-tauri-drag-region>
         <div class="clock-container"
              data-tauri-drag-region>
-<!--            <Vue3Clock-->
-<!--                :config="{-->
-<!--                    ...globalStore.clockStyle,-->
-<!--                    numberStyle: 'fill'-->
-<!--                }"-->
-<!--                @clock-ready="bindClock"/>-->
+            <Vue3Clock
+                :config="{
+                    ...globalStore.clockStyle,
+                    numberStyle: 'fill'
+                }"
+                @clock-ready="bindClock"/>
         </div>
         <div class="overview-container"
              data-tauri-drag-region>

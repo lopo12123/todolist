@@ -1,9 +1,16 @@
 <script lang="ts" setup>
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { computed } from "vue";
 
+const route = useRoute()
 const router = useRouter()
 
+const activeName = computed(() => {
+    return route.name as 'OverviewSummary' | 'OverviewDetail'
+})
+
 const doSwitch = (toName: 'OverviewSummary' | 'OverviewDetail') => {
+    if(activeName.value === toName) return;
     router.push({ name: toName })
 }
 const back = () => {
@@ -13,11 +20,11 @@ const back = () => {
 
 <template>
     <div class="banner">
-        <div class="banner-btn with-hover" title="查看统计"
+        <div :class="['banner-btn', activeName === 'OverviewSummary' ? 'active-part' : 'with-hover']" title="查看统计"
              @click="doSwitch('OverviewSummary')">
             Summary
         </div>
-        <div class="banner-btn with-hover" title="查看明细"
+        <div :class="['banner-btn', activeName === 'OverviewDetail' ? 'active-part' : 'with-hover']" title="查看明细"
              @click="doSwitch('OverviewDetail')">
             Detail
         </div>
@@ -42,5 +49,9 @@ const back = () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .active-part {
+        color: #fac858;
+    }
 }
 </style>

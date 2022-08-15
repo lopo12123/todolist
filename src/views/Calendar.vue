@@ -25,7 +25,7 @@ const bindRenderer = (instance: CalendarRenderer) => {
             <Banner @month-change="switchMonth"/>
         </template>
         <template #body>
-<!--            <CalenderChart @calendar-ready="bindRenderer"/>-->
+            <CalenderChart @calendar-ready="bindRenderer"/>
         </template>
     </WithBanner>
 </template>
