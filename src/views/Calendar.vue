@@ -5,12 +5,23 @@ import CalenderChart from "./Calendar/CalendarChart.vue";
 import WithBanner from "../layouts/WithBanner.vue";
 import type { CalendarRenderer, CalendarTodoData } from "@/scripts/useCalendar";
 import { useTodoList } from "@/scripts/useTodo";
+import { doNotification } from "@/scripts/useTauri";
 
 const switchMonth = ({ year, month }: YM) => {
-    const recordList: CalendarTodoData[] = useTodoList()
+    useTodoList()
         .getCalendarPin(year, month)
-        .map(day => ({ date: day.date, count: day.records.length }))
-    renderer.value?.render(year, month, recordList)
+        .then(calendarPins => {
+            const recordList: CalendarTodoData[] = calendarPins
+                .map(day => ({
+                    date: day.date,
+                    count: day.records.length
+                }))
+
+            renderer.value?.render(year, month, recordList)
+        })
+        .catch(err => {
+            doNotification('获取代办出错', err.toString())
+        })
 }
 
 const renderer = shallowRef<CalendarRenderer | null>(null)

@@ -453,17 +453,52 @@ class TODOList {
      * @param year 年
      * @param month 月
      */
-    getCalendarPin(year: number, month: number): CalendarSummary {
-        return [
-            // @ts-ignore
-            { date: `${ year }-${ month }-2`, records: [ {}, {} ] },
-            // @ts-ignore
-            { date: `${ year }-${ month }-12`, records: [ {} ] },
-            // @ts-ignore
-            { date: `${ year }-${ month }-22`, records: [ {}, {}, {}, {}, {}, {} ] },
-            // @ts-ignore
-            { date: `${ year }-${ month }-27`, records: [ {}, {}, {}, {} ] }
-        ]
+    getCalendarPin(year: number, month: number): Promise<CalendarSummary> {
+        const start = new Date(`${ year }-${ month }-01 00:00:00`).getTime()
+        const end = month === 12
+            ? (new Date(`${ year + 1 }-01-01 00:00:00`).getTime() - 1000)
+            : (new Date(`${ year }-${ month + 1 }-01 00:00:00`).getTime() - 1000)
+
+        return new Promise((resolve, reject) => {
+            this.#dbc
+                .query_pk<TodoRecord>(DBStatic.storeName, IDBKeyRange.bound(start, end))
+                .then(records => {
+                    const _pins: CalendarSummary = []
+                    records.sort((a, b) => a.due - b.due)
+                        .forEach(record => {
+                            const recordDate = new Date(record.due).toLocaleDateString().replace(/\//g, '-')
+                            // 另一天 新增
+                            if(_pins.length === 0
+                                || _pins.at(-1)!.date !== recordDate) {
+                                _pins.push({
+                                    date: recordDate,
+                                    records: [ record ]
+                                })
+                            }
+                            // 同一天 叠加
+                            else {
+                                _pins.at(-1)!.records.push(record)
+                            }
+                        })
+
+                    resolve(_pins)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+
+        // test data
+        // return [
+        //     // @ts-ignore
+        //     { date: `${ year }-${ month }-2`, records: [ {}, {} ] },
+        //     // @ts-ignore
+        //     { date: `${ year }-${ month }-12`, records: [ {} ] },
+        //     // @ts-ignore
+        //     { date: `${ year }-${ month }-22`, records: [ {}, {}, {}, {}, {}, {} ] },
+        //     // @ts-ignore
+        //     { date: `${ year }-${ month }-27`, records: [ {}, {}, {}, {} ] }
+        // ]
     }
 
     /**

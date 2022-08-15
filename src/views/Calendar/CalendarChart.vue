@@ -2,6 +2,7 @@
 import { onBeforeUnmount, onMounted, ref, shallowRef } from "vue";
 import { CalendarRenderer, CalendarTodoData } from "@/scripts/useCalendar";
 import { useTodoList } from "@/scripts/useTodo";
+import { doNotification } from "@/scripts/useTauri";
 
 const emits = defineEmits<{
     (ev: 'calendar-ready', renderer: CalendarRenderer): void
@@ -14,15 +15,24 @@ const doRender = (el: HTMLDivElement) => {
     const year = new Date().getFullYear()
     const month = new Date().getMonth() + 1
 
-    const recordList: CalendarTodoData[] = useTodoList()
+    useTodoList()
         .getCalendarPin(year, month)
-        .map(day => ({ date: day.date, count: day.records.length }))
+        .then(calendarPins => {
+            console.log(calendarPins)
+            const recordList: CalendarTodoData[] = calendarPins.map(day => ({
+                date: day.date,
+                count: day.records.length
+            }))
 
-    const calendar = new CalendarRenderer(el)
-    chartRenderer.value = calendar
-    calendar.render(year, month, recordList)
+            const calendar = new CalendarRenderer(el)
+            chartRenderer.value = calendar
+            calendar.render(year, month, recordList)
 
-    emits('calendar-ready', calendar)
+            emits('calendar-ready', calendar)
+        })
+        .catch(err => {
+            doNotification('获取代办出错', err.toString())
+        })
 }
 
 onMounted(() => {
