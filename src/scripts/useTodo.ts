@@ -352,20 +352,41 @@ class TODOList {
 
     // endregion
 
-    // region
+    // region 增删查
+    /**
+     * @description 新增
+     * @param todo
+     */
     addTodoRecord(todo: TodoRecord) {
         return this.#dbc.insert(DBStatic.storeName, { ...todo })
+    }
+
+    /**
+     * @description 删除
+     * @param due pk
+     */
+    removeTodoRecord(due: number) {
+        return this.#dbc.remove(DBStatic.storeName, due)
+    }
+
+    /**
+     * @description 区间查询
+     * @param start 起始时间
+     * @param end 结束时间
+     */
+    queryTodoRecord_due(start: number, end: number) {
+        return this.#dbc.query(DBStatic.storeName, IDBKeyRange.bound(start, end))
     }
 
     // endregion
 
     // region 统计总览
     /**
-     * @description 获取某月的统计结果 (首页日历展示)
-     * @param year
-     * @param month
+     * @description 获取某月的代办项列表 (用于渲染日历)
+     * @param year 年
+     * @param month 月
      */
-    getMonthSummary(year: number, month: number): MonthSummary {
+    getMonthPin(year: number, month: number): MonthSummary {
         return [
             // @ts-ignore
             { date: `${ year }-${ month }-2`, records: [ {}, {} ] },

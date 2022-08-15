@@ -15,7 +15,7 @@ const doRender = (el: HTMLDivElement) => {
     const month = new Date().getMonth() + 1
 
     const recordList: CalendarTodoData[] = useTodoList()
-        .getMonthSummary(year, month)
+        .getMonthPin(year, month)
         .map(day => ({ date: day.date, count: day.records.length }))
 
     const calendar = new CalendarRenderer(el)

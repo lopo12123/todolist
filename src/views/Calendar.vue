@@ -8,7 +8,7 @@ import { useTodoList } from "@/scripts/useTodo";
 
 const switchMonth = ({ year, month }: YM) => {
     const recordList: CalendarTodoData[] = useTodoList()
-        .getMonthSummary(year, month)
+        .getMonthPin(year, month)
         .map(day => ({ date: day.date, count: day.records.length }))
     renderer.value?.render(year, month, recordList)
 }
