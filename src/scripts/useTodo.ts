@@ -1,3 +1,5 @@
+import { dateRange } from "@/scripts/util";
+
 class UseDB {
     /**
      * @description 数据库实例
@@ -362,7 +364,7 @@ export type CalendarSummary = {
 
 // region Summary
 // 单项总览: 总计 已过 未来
-export type SummaryPie = { total: number, past: number, feature: number }
+export type SummaryPie = { total: number, past: number }
 // 总览页面: 日 周 月 季 年
 export type OverviewSummary = {
     day: SummaryPie
@@ -463,17 +465,55 @@ class TODOList {
     /**
      * @description 获取总览
      */
-    getOverviewSummary(): OverviewSummary {
-        // const todo
-        const _summary: OverviewSummary = {
-            day: { total: 0, past: 0, feature: 0 },
-            week: { total: 0, past: 0, feature: 0 },
-            month: { total: 0, past: 0, feature: 0 },
-            quarter: { total: 0, past: 0, feature: 0 },
-            year: { total: 0, past: 0, feature: 0 }
-        }
+    getOverviewSummary(): Promise<OverviewSummary> {
+        const _range = dateRange()
 
-        return _summary
+        const _queryList = [
+            this.#dbc.query_pk<TodoRecord>(DBStatic.storeName, IDBKeyRange.bound(_range.day[0], _range.day[1])),
+            this.#dbc.query_pk<TodoRecord>(DBStatic.storeName, IDBKeyRange.bound(_range.week[0], _range.week[1])),
+            this.#dbc.query_pk<TodoRecord>(DBStatic.storeName, IDBKeyRange.bound(_range.month[0], _range.month[1])),
+            this.#dbc.query_pk<TodoRecord>(DBStatic.storeName, IDBKeyRange.bound(_range.quarter[0], _range.quarter[1])),
+            this.#dbc.query_pk<TodoRecord>(DBStatic.storeName, IDBKeyRange.bound(_range.year[0], _range.year[1])),
+        ]
+
+        return new Promise<OverviewSummary>((resolve, reject) => {
+            Promise.all(_queryList)
+                .then(_summaries => {
+                    const _now = Date.now()
+
+                    const dayPast = _summaries[0].findIndex(_summary => _summary.due > _now)
+                    const weekPast = _summaries[1].findIndex(_summary => _summary.due > _now)
+                    const monthPast = _summaries[2].findIndex(_summary => _summary.due > _now)
+                    const quarterPast = _summaries[3].findIndex(_summary => _summary.due > _now)
+                    const yearPast = _summaries[4].findIndex(_summary => _summary.due > _now)
+
+                    resolve({
+                        day: {
+                            total: _summaries[0].length,
+                            past: dayPast === -1 ? _summaries[0].length : dayPast
+                        },
+                        week: {
+                            total: _summaries[1].length,
+                            past: weekPast === -1 ? _summaries[1].length : weekPast
+                        },
+                        month: {
+                            total: _summaries[2].length,
+                            past: monthPast === -1 ? _summaries[2].length : monthPast
+                        },
+                        quarter: {
+                            total: _summaries[3].length,
+                            past: quarterPast === -1 ? _summaries[3].length : quarterPast
+                        },
+                        year: {
+                            total: _summaries[4].length,
+                            past: yearPast === -1 ? _summaries[4].length : yearPast
+                        }
+                    })
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
     }
 
     // endregion
