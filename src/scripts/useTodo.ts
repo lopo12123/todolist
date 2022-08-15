@@ -154,21 +154,53 @@ class UseDB {
     }
 
     /**
-     * @description 查询数据
+     * @description 主键查询数据
      * @param storeName 表名
      * @param pk 查询项的主键
      */
-    query<ExpectResultType extends any>(storeName: string, pk: IDBValidKey | IDBKeyRange) {
-        return new Promise<ExpectResultType>((resolve, reject) => {
+    query_pk<ExpectResultType extends any>(storeName: string, pk: IDBValidKey | IDBKeyRange) {
+        return new Promise<ExpectResultType[]>((resolve, reject) => {
             const db = this.#db
             if(!db) reject('无数据库对象')
             else {
                 const dbOperate = db
                     .transaction(storeName, 'readonly')
                     .objectStore(storeName)
-                    .get(pk)
+                    .getAll(pk)
                 dbOperate.onsuccess = () => {
                     resolve(dbOperate.result)
+                }
+                dbOperate.onerror = () => {
+                    reject('查询数据出错')
+                }
+            }
+        })
+    }
+
+    /**
+     * @description 游标查询数据
+     * @param storeName 表名
+     * @param condition 条件
+     */
+    query_condition<ExpectResultType extends any>(storeName: string, condition: (value: ExpectResultType) => boolean) {
+        return new Promise((resolve, reject) => {
+            const db = this.#db
+            if(!db) reject('无数据库对象')
+            else {
+                const hits: ExpectResultType[] = []
+
+                const dbOperate = db
+                    .transaction(storeName, 'readonly')
+                    .objectStore(storeName)
+                    .openCursor()
+
+                dbOperate.onsuccess = () => {
+                    const cursor = dbOperate.result
+                    if(!cursor) resolve(hits)
+                    else {
+                        if(condition(cursor.value)) hits.push(cursor.value)
+                        cursor.continue()
+                    }
                 }
                 dbOperate.onerror = () => {
                     reject('查询数据出错')
@@ -257,12 +289,10 @@ class UseDB {
                     this.#db = dbOperate.result
                     resolve(this)
                 }
-                dbOperate.onupgradeneeded = (e) => {
-                    console.log('数据库升级')
+                dbOperate.onupgradeneeded = (_) => {
                     dbOperate.result.deleteObjectStore(storeName)
                 }
-                dbOperate.onerror = (err) => {
-                    console.log('删除错误:', err)
+                dbOperate.onerror = (_) => {
                     reject('删除数据表出错')
                 }
             })
@@ -313,10 +343,12 @@ export type TodoRecord = {
      */
     desc: string
 }
+
+// region Calendar
 /**
- * @description 日统计结果
+ * @description 月统计结果 - 日历展示
  */
-export type DaySummary = {
+export type CalendarSummary = {
     /**
      * @description yyyy-MM-dd
      */
@@ -325,11 +357,22 @@ export type DaySummary = {
      * @description records
      */
     records: TodoRecord[]
+}[]
+// endregion
+
+// region Summary
+// 单项总览: 总计 已过 未来
+export type SummaryPie = { total: number, past: number, feature: number }
+// 总览页面: 日 周 月 季 年
+export type OverviewSummary = {
+    day: SummaryPie
+    week: SummaryPie
+    month: SummaryPie
+    quarter: SummaryPie
+    year: SummaryPie
 }
-/**
- * @description 月统计结果
- */
-export type MonthSummary = DaySummary[]
+
+// endregion
 
 class TODOList {
     #dbc: UseDB
@@ -375,7 +418,25 @@ class TODOList {
      * @param end 结束时间
      */
     queryTodoRecord_due(start: number, end: number) {
-        return this.#dbc.query(DBStatic.storeName, IDBKeyRange.bound(start, end))
+        return this.#dbc.query_pk<TodoRecord>(DBStatic.storeName, IDBKeyRange.bound(start, end))
+    }
+
+    /**
+     * @description 模糊查询
+     * @param keyword 关键字 使用空格分割不相连内容
+     */
+    getTodoRecord_keyword(keyword: string) {
+        if(keyword.trim() === '') return this.#dbc.getStoreAll(DBStatic.storeName)
+        else {
+            const _pattern = new RegExp(keyword.split(/[ ]+/).join('.*'))
+            return this.#dbc
+                .query_condition<TodoRecord>(
+                    DBStatic.storeName,
+                    (value) => {
+                        return _pattern.test(value.title)
+                            || _pattern.test(value.desc)
+                    })
+        }
     }
 
     // endregion
@@ -386,7 +447,7 @@ class TODOList {
      * @param year 年
      * @param month 月
      */
-    getMonthPin(year: number, month: number): MonthSummary {
+    getCalendarPin(year: number, month: number): CalendarSummary {
         return [
             // @ts-ignore
             { date: `${ year }-${ month }-2`, records: [ {}, {} ] },
@@ -397,6 +458,22 @@ class TODOList {
             // @ts-ignore
             { date: `${ year }-${ month }-27`, records: [ {}, {}, {}, {} ] }
         ]
+    }
+
+    /**
+     * @description 获取总览
+     */
+    getOverviewSummary(): OverviewSummary {
+        // const todo
+        const _summary: OverviewSummary = {
+            day: { total: 0, past: 0, feature: 0 },
+            week: { total: 0, past: 0, feature: 0 },
+            month: { total: 0, past: 0, feature: 0 },
+            quarter: { total: 0, past: 0, feature: 0 },
+            year: { total: 0, past: 0, feature: 0 }
+        }
+
+        return _summary
     }
 
     // endregion

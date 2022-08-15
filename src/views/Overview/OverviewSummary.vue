@@ -1,10 +1,22 @@
 <script lang="ts" setup>
 
+import { useTodoList } from "@/scripts/useTodo";
+
+const doCursor = () => {
+    useTodoList()
+        .getTodoRecord_keyword('1 1')
+        .then(res => {
+            console.log(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
 </script>
 
 <template>
     <div class="overview-summary">
-        总览 年/季/月/周 已过/未至
+        <button @click="doCursor">cursor</button>
     </div>
 </template>
 

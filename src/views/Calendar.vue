@@ -8,7 +8,7 @@ import { useTodoList } from "@/scripts/useTodo";
 
 const switchMonth = ({ year, month }: YM) => {
     const recordList: CalendarTodoData[] = useTodoList()
-        .getMonthPin(year, month)
+        .getCalendarPin(year, month)
         .map(day => ({ date: day.date, count: day.records.length }))
     renderer.value?.render(year, month, recordList)
 }
@@ -25,7 +25,7 @@ const bindRenderer = (instance: CalendarRenderer) => {
             <Banner @month-change="switchMonth"/>
         </template>
         <template #body>
-            <CalenderChart @calendar-ready="bindRenderer"/>
+<!--            <CalenderChart @calendar-ready="bindRenderer"/>-->
         </template>
     </WithBanner>
 </template>
