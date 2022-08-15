@@ -215,8 +215,8 @@ class UseDB {
      * @description 获取数据表中的全部数据
      * @param storeName 表名
      */
-    getStoreAll(storeName: string) {
-        return new Promise<any[]>((resolve, reject) => {
+    getStoreAll<ExpectResultType extends any>(storeName: string) {
+        return new Promise<ExpectResultType[]>((resolve, reject) => {
             const db = this.#db
             if(!db) reject('无数据库对象')
             else {
@@ -419,16 +419,20 @@ class TODOList {
      * @param start 起始时间
      * @param end 结束时间
      */
-    queryTodoRecord_due(start: number, end: number) {
-        return this.#dbc.query_pk<TodoRecord>(DBStatic.storeName, IDBKeyRange.bound(start, end))
+    getTodoRecord_due(start?: number, end?: number) {
+        if(!start && !end) return this.#dbc.getStoreAll<TodoRecord>(DBStatic.storeName)
+        else if(start && end) return this.#dbc.query_pk<TodoRecord>(DBStatic.storeName, IDBKeyRange.bound(start, end))
+        else if(start) return this.#dbc.query_pk<TodoRecord>(DBStatic.storeName, IDBKeyRange.lowerBound(start))
+        else if(end) return this.#dbc.query_pk<TodoRecord>(DBStatic.storeName, IDBKeyRange.upperBound(end))
+        else return Promise.reject('内部错误(never)')
     }
 
     /**
      * @description 模糊查询
      * @param keyword 关键字 使用空格分割不相连内容
      */
-    getTodoRecord_keyword(keyword: string) {
-        if(keyword.trim() === '') return this.#dbc.getStoreAll(DBStatic.storeName)
+    getTodoRecord_keyword(keyword?: string) {
+        if(!keyword || keyword.trim() === '') return this.#dbc.getStoreAll(DBStatic.storeName)
         else {
             const _pattern = new RegExp(keyword.split(/[ ]+/).join('.*'))
             return this.#dbc
