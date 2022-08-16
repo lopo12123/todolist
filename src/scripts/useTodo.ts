@@ -441,7 +441,6 @@ class TODOList {
                     DBStatic.storeName,
                     (value) => {
                         return _pattern.test(value.title)
-                            || _pattern.test(value.desc)
                     })
         }
     }

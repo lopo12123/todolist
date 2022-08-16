@@ -2,7 +2,6 @@
 import { PropType } from "vue";
 
 const emits = defineEmits<{
-    (ev: 'do-preview'): void
     (ev: 'update:dialStroke', val: string): void
     (ev: 'update:numberText', val: 'Arab' | 'Roma'): void
     (ev: 'update:numberColor', val: string): void

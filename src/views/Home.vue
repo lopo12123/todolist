@@ -36,6 +36,7 @@ onBeforeUnmount(() => {
         <transition name="fade" mode="in-out">
             <PopupLayer/>
         </transition>
+
         <div class="clock-container"
              data-tauri-drag-region>
             <Vue3Clock
@@ -45,6 +46,7 @@ onBeforeUnmount(() => {
                 }"
                 @clock-ready="bindClock"/>
         </div>
+
         <div class="overview-container"
              data-tauri-drag-region>
             <router-view v-slot="{Component}">

@@ -1,17 +1,8 @@
 <script lang="ts" setup>
-import { useRouter } from "vue-router";
-
 export type SettingEmitType = 'do-default' | 'do-rollback' | 'do-apply' | 'back'
 const emits = defineEmits<{
     (ev: 'btn-ev', type: SettingEmitType): void
-    (ev: 'direct-back'): void
 }>()
-
-const router = useRouter()
-const back = () => {
-    emits('direct-back')
-    router.push({ name: 'Calendar' })
-}
 </script>
 
 <template>
@@ -29,7 +20,7 @@ const back = () => {
             Apply
         </div>
         <div class="banner-btn with-hover" title="返回首页"
-             @click="back">
+             @click="emits('btn-ev', 'back')">
             Back
         </div>
     </div>

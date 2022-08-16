@@ -1,14 +1,17 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
 import { ref } from "vue";
-import { closeWindow } from "@/scripts/useTauri";
+import { closeWindow, doNotification } from "@/scripts/useTauri";
+import { usePopup } from "@/scripts/usePopup";
 
 export type YM = { year: number, month: number }
 
 const emits = defineEmits<{
     (ev: 'month-change', ym: YM): void
 }>()
+
 const router = useRouter()
+const popupStore = usePopup()
 
 const bannerType = ref<'base' | 'operate'>('base')
 
@@ -52,7 +55,21 @@ const jump = (name: string) => {
 }
 
 const exitApp = () => {
-    closeWindow(router)
+    popupStore.showPopup('confirm', {
+        message: '确定退出?',
+        left: {
+            label: '',
+            cb() {
+                doNotification('并没有退出', '想想清楚再动手!')
+            }
+        },
+        right: {
+            label: '确认',
+            cb() {
+                closeWindow(router)
+            }
+        }
+    })
 }
 // endregion
 </script>

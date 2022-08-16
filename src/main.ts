@@ -1,4 +1,3 @@
-// import "element-plus/dist/index.css";
 import "./styles/transition.scss";
 import "./fonts/fonts.scss";
 import "./styles/index.scss";

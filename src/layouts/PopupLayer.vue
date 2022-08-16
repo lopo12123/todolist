@@ -16,21 +16,33 @@ const formatDate = (t: number) => {
 }
 
 const popupStore = usePopup()
+
+const confirmConfig = computed(() => {
+    return popupStore.confirmConfig
+})
+const doConfirmCallback = (type: 'left' | 'right') => {
+    confirmConfig.value[type].cb()
+    popupStore.hidePopup()
+}
+
 const popupData = computed(() => {
     return popupStore.popupData
 })
 </script>
 
 <template>
-    <div class="popup-layer" v-if="popupStore.popupVisible">
+    <div class="popup-layer"
+         v-if="popupStore.popupVisible"
+         data-tauri-drag-region>
         <div class="close-btn" title="关闭"
              @click="popupStore.hidePopup">
             ×
         </div>
-        <div class="popup-panel">
-            <div class="popup-line text-inline">
+
+        <div class="detail-container" v-if="popupStore.popupType === 'detail'">
+            <div class="popup-line ">
                 <div class="label">待办事项</div>
-                <div class="value" :title="popupData.title">
+                <div class="value text-inline" :title="popupData.title">
                     {{ popupData.title }}
                 </div>
             </div>
@@ -49,6 +61,21 @@ const popupData = computed(() => {
                 <div class="value">{{ formatDate(popupData.create) }}</div>
             </div>
         </div>
+
+        <div class="confirm-container"
+             v-if="popupStore.popupType === 'confirm'">
+            <div class="message">
+                {{ confirmConfig.message }}
+            </div>
+            <div class="btn-group">
+                <div class="left" @click="doConfirmCallback('left')">
+                    {{ confirmConfig.left.label || '取消' }}
+                </div>
+                <div class="right" @click="doConfirmCallback('right')">
+                    {{ confirmConfig.right.label || '确认' }}
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -65,38 +92,6 @@ const popupData = computed(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-
-    .popup-panel {
-        position: relative;
-        width: calc(100% - 200px);
-        height: calc(100% - 100px);
-        border: solid 2px #ccc;
-        border-radius: 5px;
-        background-color: #0003;
-        color: #eee;
-        font-family: PixelFont;
-        text-shadow: #000 2px 1px 1px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
-
-        .popup-line {
-            position: relative;
-            width: calc(100% - 20px);
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-
-            .label {
-                width: 80px;
-            }
-
-            .value {
-                width: calc(100% - 80px);
-            }
-        }
-    }
 
     .close-btn {
         position: absolute;
@@ -118,6 +113,86 @@ const popupData = computed(() => {
 
         &:hover {
             transform: rotate(-360deg);
+        }
+    }
+
+    .detail-container {
+        position: relative;
+        width: calc(100% - 200px);
+        height: calc(100% - 100px);
+        border: solid 2px #ccc;
+        border-radius: 5px;
+        background-color: #0003;
+        color: #eee;
+        font-family: PixelFont;
+        text-shadow: #000 2px 1px 1px;
+        cursor: default;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+
+        .popup-line {
+            position: relative;
+            width: calc(100% - 20px);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+
+            .label {
+                width: 80px;
+            }
+
+            .value {
+                width: calc(100% - 80px);
+                padding-right: 20px;
+            }
+        }
+    }
+
+    .confirm-container {
+        position: relative;
+        width: calc(100% - 200px);
+        height: calc(100% - 100px);
+        border: solid 2px #ccc;
+        border-radius: 5px;
+        background-color: #0003;
+        color: #eee;
+        font-family: PixelFont;
+        text-shadow: #000 2px 1px 1px;
+        cursor: default;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+
+        .message {
+            position: relative;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-group {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+
+            .left, .right {
+                position: relative;
+                width: 80px;
+                padding: 3px 5px;
+                border: solid 1px #ccc;
+                border-radius: 2px;
+                text-align: center;
+                cursor: pointer;
+                opacity: 0.7;
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
         }
     }
 }

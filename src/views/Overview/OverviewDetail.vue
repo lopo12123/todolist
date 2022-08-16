@@ -23,24 +23,39 @@ const getListData = () => {
 /**
  * @description 删除
  * @param due 主键
+ * @param title 标题
  */
-const doRemove = (due: number) => {
-    useTodoList()
-        .removeTodoRecord(due)
-        .then(_ => {
-            doNotification('删除代办成功', '删除成功')
-            getListData()
-        })
-        .catch(err => {
-            doNotification('删除代办出错', err.toString())
-        })
+const doRemove = (due: number, title: string) => {
+    popupStore.showPopup('confirm', {
+        message: '确认删除此代办?',
+        left: {
+            label: '取消',
+            cb() {
+                doNotification('并没有删除', '下次想想清楚!')
+            }
+        },
+        right: {
+            label: '确认',
+            cb() {
+                useTodoList()
+                    .removeTodoRecord(due)
+                    .then(_ => {
+                        doNotification('删除成功', `删除代办 [${ title }]`)
+                        getListData()
+                    })
+                    .catch(err => {
+                        doNotification('删除出错', err.toString())
+                    })
+            }
+        }
+    })
 }
 /**
  * @description 显示详情
  * @param record 详细内容
  */
 const popupDetail = (record: TodoRecord) => {
-    popupStore.showPopup(record)
+    popupStore.showPopup('detail', record)
 }
 
 onMounted(() => {
@@ -67,7 +82,7 @@ onMounted(() => {
                 </div>
                 <div class="expand">
                     <div class="op-btn with-hover"
-                         @click="doRemove(record.due)">
+                         @click="doRemove(record.due, record.title)">
                         删除
                     </div>
                     <div class="op-btn with-hover"

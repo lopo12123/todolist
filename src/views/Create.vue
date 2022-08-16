@@ -22,6 +22,7 @@ const solveBtnEv = (type: CreateEmitType) => {
                 useTodoList()
                     .addTodoRecord(_todo)
                     .then(_ => {
+                        doNotification('新建成功', `新建代办 [${ _todo.title }]`)
                         router.push({ name: 'Calendar' })
                     })
                     .catch(err => {
