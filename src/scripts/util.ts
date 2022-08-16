@@ -42,3 +42,13 @@ export const dateRange = (): {
 
     return { day, week, month, quarter, year }
 }
+
+/**
+ * @description 获取 yyyy-MM-dd
+ */
+export const get_yyyyMMdd = () => {
+    const _date = new Date()
+    return `${ _date.getFullYear() }-`
+        + `${ (_date.getMonth() + 1 + '').padStart(2, '0') }-`
+        + `${ (_date.getDate() + '').padStart(2, '0') }`
+}
