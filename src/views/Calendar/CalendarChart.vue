@@ -18,7 +18,6 @@ const doRender = (el: HTMLDivElement) => {
     useTodoList()
         .getCalendarPin(year, month)
         .then(calendarPins => {
-            console.log(calendarPins)
             const recordList: CalendarTodoData[] = calendarPins.map(day => ({
                 date: day.date,
                 count: day.records.length

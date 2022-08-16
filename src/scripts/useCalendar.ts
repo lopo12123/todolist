@@ -25,7 +25,7 @@ const generateCalendarData = (year: number, month: number, list: CalendarTodoDat
                 yyyyMMdd,
                 {
                     date: yyyyMMdd,
-                    count: list.find(({ date }) => date.endsWith(idx + 1 + ''))?.count ?? 0
+                    count: list.find(({ date }) => date.endsWith('-' + (idx + 1 + '').padStart(2, '0')))?.count ?? 0
                 }
             ]
         })
