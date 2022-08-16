@@ -2,6 +2,9 @@
 import { onMounted, ref } from "vue";
 import { TodoRecord, useTodoList } from "@/scripts/useTodo";
 import { doNotification } from "@/scripts/useTauri";
+import { usePopup } from "@/scripts/usePopup";
+
+const popupStore = usePopup()
 
 const keyword = ref('')
 
@@ -37,8 +40,7 @@ const doRemove = (due: number) => {
  * @param record 详细内容
  */
 const popupDetail = (record: TodoRecord) => {
-    // todo
-    console.log('dialog 展示: ', record)
+    popupStore.showPopup(record)
 }
 
 onMounted(() => {
@@ -83,8 +85,8 @@ onMounted(() => {
     position: relative;
     width: 100%;
     height: 100%;
-    color: #eee;
     padding: 10px 20px;
+    color: #eee;
     font-family: PixelFont;
     text-shadow: #000 2px 1px 1px;
     display: flex;

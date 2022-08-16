@@ -1,7 +1,9 @@
 <script lang="ts" setup>
-import { shallowRef } from "vue";
+import { onBeforeUnmount, shallowRef } from "vue";
 import { useGlobal } from "@/scripts/useGlobal";
 import Vue3Clock, { ClockConfig, UseClock } from "vue3clock";
+import { useTodoList } from "@/scripts/useTodo";
+import PopupLayer from "@/layouts/PopupLayer.vue";
 
 const globalStore = useGlobal()
 
@@ -22,11 +24,16 @@ const bindClock = (instance: UseClock) => {
 const rerenderClock = (renderOption: Partial<ClockConfig>) => {
     clock.value?.rerender(renderOption)
 }
+
+onBeforeUnmount(() => {
+    useTodoList().close()
+})
 </script>
 
 <template>
     <div class="home-view"
          data-tauri-drag-region>
+        <PopupLayer/>
         <div class="clock-container"
              data-tauri-drag-region>
             <Vue3Clock
