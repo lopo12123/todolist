@@ -185,7 +185,7 @@ class UseDB {
      * @param condition 条件
      */
     query_condition<ExpectResultType extends any>(storeName: string, condition: (value: ExpectResultType) => boolean) {
-        return new Promise((resolve, reject) => {
+        return new Promise<ExpectResultType[]>((resolve, reject) => {
             const db = this.#db
             if(!db) reject('无数据库对象')
             else {
@@ -415,6 +415,7 @@ class TODOList {
     }
 
     /**
+     * @deprecated 界面展示位置不够 此api不适用
      * @description 区间查询
      * @param start 起始时间
      * @param end 结束时间
@@ -432,7 +433,7 @@ class TODOList {
      * @param keyword 关键字 使用空格分割不相连内容
      */
     getTodoRecord_keyword(keyword?: string) {
-        if(!keyword || keyword.trim() === '') return this.#dbc.getStoreAll(DBStatic.storeName)
+        if(!keyword || keyword.trim() === '') return this.#dbc.getStoreAll<TodoRecord>(DBStatic.storeName)
         else {
             const _pattern = new RegExp(keyword.split(/[ ]+/).join('.*'))
             return this.#dbc
