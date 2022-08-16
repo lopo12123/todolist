@@ -33,7 +33,9 @@ onBeforeUnmount(() => {
 <template>
     <div class="home-view"
          data-tauri-drag-region>
-        <PopupLayer/>
+        <transition name="fade" mode="in-out">
+            <PopupLayer/>
+        </transition>
         <div class="clock-container"
              data-tauri-drag-region>
             <Vue3Clock
