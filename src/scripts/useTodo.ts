@@ -1,4 +1,5 @@
 import { dateRange } from "@/scripts/util";
+import { doNotification } from "@/scripts/useTauri";
 
 class UseDB {
     /**
@@ -169,6 +170,30 @@ class UseDB {
                     .transaction(storeName, 'readonly')
                     .objectStore(storeName)
                     .getAll(pk)
+                dbOperate.onsuccess = () => {
+                    resolve(dbOperate.result)
+                }
+                dbOperate.onerror = () => {
+                    reject('查询数据出错')
+                }
+            }
+        })
+    }
+
+    /**
+     * @description 主键查询数据 (查询第一项)
+     * @param storeName 表名
+     * @param pk 查询项的主键
+     */
+    query_pk_single<ExpectResultType extends any>(storeName: string, pk: IDBValidKey | IDBKeyRange) {
+        return new Promise<ExpectResultType>((resolve, reject) => {
+            const db = this.#db
+            if(!db) reject('无数据库对象')
+            else {
+                const dbOperate = db
+                    .transaction(storeName, 'readonly')
+                    .objectStore(storeName)
+                    .get(pk)
                 dbOperate.onsuccess = () => {
                     resolve(dbOperate.result)
                 }
@@ -377,6 +402,7 @@ export type OverviewSummary = {
 // endregion
 
 class TODOList {
+    #timerId: any
     #dbc: UseDB
 
     constructor() {
@@ -397,6 +423,25 @@ class TODOList {
 
     // endregion
 
+    // region 定时器
+    /**
+     * @description 设置自动提醒定时器
+     */
+    waitForNextTodo() {
+        // 清除上次计时 (主动调用时需要)
+        clearTimeout(this.#timerId)
+        this.#dbc
+            .query_pk_single<TodoRecord>(DBStatic.storeName, IDBKeyRange.lowerBound(Date.now(), true))
+            .then(record => {
+                this.#timerId = setTimeout(() => {
+                    doNotification(`待办提醒 [${ record.title }]`, record.desc || '无描述')
+                    this.waitForNextTodo()
+                }, record.due - Date.now())
+            })
+    }
+
+    // endregion
+
     // region 增删查
     /**
      * @description 新增
@@ -404,6 +449,10 @@ class TODOList {
      */
     addTodoRecord(todo: TodoRecord) {
         return this.#dbc.insert(DBStatic.storeName, { ...todo })
+            .then(_ => {
+                this.waitForNextTodo()
+                return _
+            })
     }
 
     /**
@@ -412,6 +461,10 @@ class TODOList {
      */
     removeTodoRecord(due: number) {
         return this.#dbc.remove(DBStatic.storeName, due)
+            .then(_ => {
+                this.waitForNextTodo()
+                return _
+            })
     }
 
     /**
@@ -561,12 +614,16 @@ class TODOList {
      * @description 退出前关闭数据库连接
      */
     close() {
+        // 清除计时器
+        clearTimeout(this.#timerId)
+        // 关闭数据库连接
         this.#dbc.close()
     }
 }
 
 // 使用单例
 const _todoList = new TODOList()
-// 顶层 await 进行初始化
+// 顶层 await 进行初始化并设置定时器以自动提醒
 await _todoList.setup()
+    .then(() => _todoList.waitForNextTodo())
 export const useTodoList = () => _todoList

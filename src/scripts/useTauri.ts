@@ -16,7 +16,7 @@ const closeWindow = (router: Router) => {
             appWindow.close()
                 .then(resolve)
                 .catch(reject)
-        }, 500)
+        }, 700)
     })
 }
 // endregion

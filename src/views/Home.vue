@@ -1,18 +1,22 @@
 <script lang="ts" setup>
-import { onBeforeUnmount, shallowRef } from "vue";
+import { onBeforeUnmount, onMounted, shallowRef } from "vue";
 import { useGlobal } from "@/scripts/useGlobal";
 import Vue3Clock, { ClockConfig, UseClock } from "vue3clock";
 import { useTodoList } from "@/scripts/useTodo";
 import PopupLayer from "@/layouts/PopupLayer.vue";
+import { listen } from "@tauri-apps/api/event";
+import { closeWindow, doNotification } from "@/scripts/useTauri";
+import { useRouter } from "vue-router";
 
+const router = useRouter()
 const globalStore = useGlobal()
 
 try {
     const clockStyleIfExist = localStorage.getItem('clock-style')
     if(clockStyleIfExist) globalStore.mergeClockStyle(JSON.parse(clockStyleIfExist))
 }
-catch (e) {
-    console.log(e)
+catch (e: any) {
+    doNotification('初始化错误', e.toString())
 }
 
 const clock = shallowRef<UseClock | null>(null)
@@ -25,6 +29,21 @@ const rerenderClock = (renderOption: Partial<ClockConfig>) => {
     clock.value?.rerender(renderOption)
 }
 
+onMounted(() => {
+    listen<'pin' | 'unpin' | 'quit'>("tray", ({ payload }) => {
+        switch(payload) {
+            case 'pin':
+                doNotification('窗口设置', '当前窗口将始终保持最前!')
+                break
+            case 'unpin':
+                doNotification('窗口设置', '当前窗口已取消保持最前!')
+                break
+            case 'quit':
+                closeWindow(router)
+                break
+        }
+    })
+})
 onBeforeUnmount(() => {
     useTodoList().close()
 })
