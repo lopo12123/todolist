@@ -17,8 +17,8 @@ export default defineConfig({
         strictPort: true
     },
     build: {
-        target: [ 'es2021', 'chrome97' ],
-        outDir: './docs',
+        target: ["esnext"],
+        outDir: './dist',
         emptyOutDir: true
     },
 })

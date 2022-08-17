@@ -1,13 +1,21 @@
 <script lang="ts" setup>
 import { PropType } from "vue";
 
+type UpdateEmits = 'update:dialStroke'
+    | 'update:numberText'
+    | 'update:numberColor'
+    | 'update:hourStroke'
+    | 'update:minuteStroke'
+    | 'update:secondStroke'
+
 const emits = defineEmits<{
-    (ev: 'update:dialStroke', val: string): void
-    (ev: 'update:numberText', val: 'Arab' | 'Roma'): void
-    (ev: 'update:numberColor', val: string): void
-    (ev: 'update:hourStroke', val: string): void
-    (ev: 'update:minuteStroke', val: string): void
-    (ev: 'update:secondStroke', val: string): void
+    (ev: UpdateEmits, val: string | 'Arab' | 'Roma'): void
+    // (ev: 'update:dialStroke', val: string): void
+    // (ev: 'update:numberText', val: 'Arab' | 'Roma'): void
+    // (ev: 'update:numberColor', val: string): void
+    // (ev: 'update:hourStroke', val: string): void
+    // (ev: 'update:minuteStroke', val: string): void
+    // (ev: 'update:secondStroke', val: string): void
 }>()
 const props = defineProps({
     dialStroke: {
@@ -29,6 +37,10 @@ const props = defineProps({
         type: String
     }
 })
+
+const emitTransfer = (type: UpdateEmits, ev: Event) => {
+    emits(type, (ev.target as HTMLInputElement).value)
+}
 </script>
 
 <template>
@@ -39,7 +51,7 @@ const props = defineProps({
                 <div class="color-picker"
                      :style="`background-color: ${dialStroke}`"/>
                 <input class="hidden-color-picker" type="color"
-                       @change="emits('update:dialStroke', $event.target.value)">
+                       @change="emitTransfer('update:dialStroke', $event)">
             </label>
         </div>
         <div class="setting-line">
@@ -61,7 +73,7 @@ const props = defineProps({
                 <div class="color-picker"
                      :style="`background-color: ${numberColor}`"/>
                 <input class="hidden-color-picker" type="color"
-                       @change="emits('update:numberColor', $event.target.value)">
+                       @change="emitTransfer('update:numberColor', $event)">
             </label>
         </div>
         <div class="setting-line">
@@ -70,7 +82,7 @@ const props = defineProps({
                 <div class="color-picker"
                      :style="`background-color: ${hourStroke}`"/>
                 <input class="hidden-color-picker" type="color"
-                       @change="emits('update:hourStroke', $event.target.value)">
+                       @change="emitTransfer('update:hourStroke', $event)">
             </label>
         </div>
         <div class="setting-line">
@@ -79,7 +91,7 @@ const props = defineProps({
                 <div class="color-picker"
                      :style="`background-color: ${minuteStroke}`"/>
                 <input class="hidden-color-picker" type="color"
-                       @change="emits('update:minuteStroke', $event.target.value)">
+                       @change="emitTransfer('update:minuteStroke', $event)">
             </label>
         </div>
         <div class="setting-line">
@@ -88,7 +100,7 @@ const props = defineProps({
                 <div class="color-picker"
                      :style="`background-color: ${secondStroke}`"/>
                 <input class="hidden-color-picker" type="color"
-                       @change="emits('update:secondStroke', $event.target.value)">
+                       @change="emitTransfer('update:secondStroke', $event)">
             </label>
         </div>
     </div>
