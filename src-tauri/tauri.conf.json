@@ -53,6 +53,7 @@
         "updater": {
             "active": false
         },
+        "macOSPrivateApi": true,
         "windows": [
             {
                 "label": "main",
