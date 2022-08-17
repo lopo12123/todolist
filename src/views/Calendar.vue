@@ -20,7 +20,7 @@ const switchMonth = ({ year, month }: YM) => {
             renderer.value?.render(year, month, recordList)
         })
         .catch(err => {
-            doNotification('获取代办出错', err.toString())
+            doNotification('获取待办出错', err.toString())
         })
 }
 

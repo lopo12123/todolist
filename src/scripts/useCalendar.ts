@@ -38,7 +38,7 @@ const generateCalendarOption = (year: number, month: number, list: CalendarTodoD
             position: point => [ point[0], point[1] - 30 ],
             formatter: (param) => {
                 // @ts-ignore
-                return param.data[1].count === 0 ? '' : `${ param.data[1].count } 项代办`
+                return param.data[1].count === 0 ? '' : `${ param.data[1].count } 项待办`
             },
             padding: [ 3, 5 ],
             borderColor: '#fff',

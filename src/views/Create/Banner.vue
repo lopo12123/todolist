@@ -16,7 +16,7 @@ const back = () => {
 
 <template>
     <div class="banner">
-        <div class="banner-btn with-hover" title="新建当前代办"
+        <div class="banner-btn with-hover" title="新建当前待办"
              @click="emits('btn-ev','create')">
             Create
         </div>

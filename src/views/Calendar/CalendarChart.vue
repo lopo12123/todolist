@@ -30,7 +30,7 @@ const doRender = (el: HTMLDivElement) => {
             emits('calendar-ready', calendar)
         })
         .catch(err => {
-            doNotification('获取代办出错', err.toString())
+            doNotification('获取待办出错', err.toString())
         })
 }
 

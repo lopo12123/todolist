@@ -93,7 +93,7 @@ const exitApp = () => {
                 </div>
             </div>
             <div class="operate-banner" v-else>
-                <div class="banner-btn with-hover" @click="jump('Create')" title="新建代办">
+                <div class="banner-btn with-hover" @click="jump('Create')" title="新建待办">
                     New
                 </div>
                 <div class="banner-btn with-hover" title="总览/查询"

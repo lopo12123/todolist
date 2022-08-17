@@ -449,7 +449,7 @@ class TODOList {
 
     // region 统计总览
     /**
-     * @description 获取某月的代办项列表 (用于渲染日历)
+     * @description 获取某月的待办项列表 (用于渲染日历)
      * @param year 年
      * @param month 月
      */

@@ -27,7 +27,7 @@ const getListData = () => {
  */
 const doRemove = (due: number, title: string) => {
     popupStore.showPopup('confirm', {
-        message: '确认删除此代办?',
+        message: '确认删除此待办?',
         left: {
             label: '取消',
             cb() {
@@ -40,7 +40,7 @@ const doRemove = (due: number, title: string) => {
                 useTodoList()
                     .removeTodoRecord(due)
                     .then(_ => {
-                        doNotification('删除成功', `删除代办 [${ title }]`)
+                        doNotification('删除成功', `删除待办 [${ title }]`)
                         getListData()
                     })
                     .catch(err => {

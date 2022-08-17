@@ -19,7 +19,7 @@ const initTemplate = {
     desc: ''
 }
 
-// region 新的代办项内容
+// region 新的待办项内容
 const newTodo = ref<TodoRecord>({ ...initTemplate })
 const ifWarning = ref(false)
 const warningId = ref<any>(-1)
