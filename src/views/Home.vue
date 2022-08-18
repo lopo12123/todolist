@@ -4,7 +4,7 @@ import { useGlobal } from "@/scripts/useGlobal";
 import Vue3Clock, { ClockConfig, UseClock } from "vue3clock";
 import { useTodoList } from "@/scripts/useTodo";
 import PopupLayer from "@/layouts/PopupLayer.vue";
-import { listen } from "@tauri-apps/api/event";
+import { listen, UnlistenFn } from "@tauri-apps/api/event";
 import { closeWindow, doNotification } from "@/scripts/useTauri";
 import { useRouter } from "vue-router";
 
@@ -29,7 +29,18 @@ const rerenderClock = (renderOption: Partial<ClockConfig>) => {
     clock.value?.rerender(renderOption)
 }
 
+// 禁用右键
+const rClickCB = (e: Event) => {
+    e.preventDefault()
+    e.stopPropagation()
+}
+
+// 系统托盘监听
+const unListenTrayEv = shallowRef<UnlistenFn | null>(null)
+
 onMounted(() => {
+    document.addEventListener('contextmenu', rClickCB)
+    // 监听系统托盘菜单事件
     listen<'pin' | 'unpin' | 'quit'>("tray", ({ payload }) => {
         switch(payload) {
             case 'pin':
@@ -43,9 +54,17 @@ onMounted(() => {
                 break
         }
     })
+        .then(_unListen => {
+            unListenTrayEv.value = _unListen
+        })
+        .catch(_ => {
+            doNotification('初始化错误', '托盘菜单事件初始化错误')
+        })
 })
 onBeforeUnmount(() => {
     useTodoList().close()
+    document.removeEventListener('contextmenu', rClickCB)
+    unListenTrayEv.value?.()
 })
 </script>
 
